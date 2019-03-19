@@ -13,7 +13,6 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: [".ts", ".tsx", ".js", ".jsx"]
     },
-    // externals: [nodeExternals()],
     module: {
       rules: [
         { test: /\.tsx?$/, loader: "ts-loader" }
