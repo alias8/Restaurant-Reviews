@@ -1,4 +1,7 @@
 const path = require("path");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = (env, argv) => {
   return {
@@ -6,9 +9,10 @@ module.exports = (env, argv) => {
     target: "node",
     mode: argv.mode,
     devtool: "inline-source-map",
+    externals: [nodeExternals()],
     output: {
       path: path.resolve(__dirname, "dist"),
-      filename: "main.js"
+      filename: "bundle.js"
     },
     resolve: {
       extensions: [".ts", ".tsx", ".js", ".jsx"]
@@ -17,6 +21,12 @@ module.exports = (env, argv) => {
       rules: [
         { test: /\.tsx?$/, loader: "ts-loader" }
       ]
-    }
+    },
+    plugins: [
+      new CleanWebpackPlugin(),
+      new CopyWebpackPlugin([
+        { from: "src/views", to: 'views' },
+      ])
+    ]
   };
 };

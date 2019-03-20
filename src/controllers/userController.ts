@@ -9,6 +9,8 @@ export class UserController implements IController {
 	}
 
 	private initializeRoutes() {
-		this.router.get("/", (req, res) => res.send('Hello World!'));
+		this.router.get("/", (req, res) => {
+			return res.render('hello');
+		});
 	}
 }
