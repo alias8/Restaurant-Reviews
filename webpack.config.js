@@ -5,13 +5,18 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = (env, argv) => {
   return {
-    entry: "./src/server.ts",
+    entry: "./server.ts",
     target: "node",
     mode: argv.mode,
+    context: path.resolve(__dirname, 'src'),
+    node: {
+      __dirname: false,
+      __filename: false,
+    },
     devtool: "inline-source-map",
     externals: [nodeExternals()],
     output: {
-      path: path.resolve(__dirname, "dist"),
+      path: path.resolve(__dirname, "src", "public", "dist"),
       filename: "bundle.js"
     },
     resolve: {
@@ -24,9 +29,9 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      new CopyWebpackPlugin([
-        { from: "src/views", to: 'views' },
-      ])
+      // new CopyWebpackPlugin([
+      //   { from: "src/views", to: 'views' },
+      // ])
     ]
   };
 };
