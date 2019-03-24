@@ -11,7 +11,7 @@ class App {
 
   constructor(controllers: IController[]) {
     this.app = express();
-    this.app.set("port", 7777);
+    this.app.set('port', 7778);
     this.app.use(express.static(path.join(__dirname, "..")));
     this.app.set("views", path.resolve(__dirname, "..", "..", "views"));
     this.app.set("view engine", "pug");
