@@ -8,7 +8,7 @@
     "start": "nodemon ./src/public/dist/bundle.js",
     "precommit": "npm run lint:fix && pretty-quick --staged",
     "ts-node": "ts-node ./src/server.ts",
-    "lint": "tslint --config tslint.json \"{src,__mocks__,__tests__}/**/*.{js,jsx,ts,tsx}\"",
+    "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix"
   },
   "repository": {

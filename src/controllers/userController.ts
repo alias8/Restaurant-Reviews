@@ -1,5 +1,5 @@
-import { IController } from '../app';
 import express from "express";
+import { IController } from '../app';
 
 export class UserController implements IController {
 	public router = express.Router();

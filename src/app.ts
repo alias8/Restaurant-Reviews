@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import path from "path";
+import path from 'path';
 
 export interface IController {
 	// path: string;
