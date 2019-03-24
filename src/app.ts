@@ -1,5 +1,4 @@
 import path from "path";
-
 import express, { Router } from "express";
 
 export interface IController {
