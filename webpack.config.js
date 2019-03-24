@@ -28,10 +28,7 @@ module.exports = (env, argv) => {
       ]
     },
     plugins: [
-      new CleanWebpackPlugin(),
-      // new CopyWebpackPlugin([
-      //   { from: "src/views", to: 'views' },
-      // ])
+      new CleanWebpackPlugin()
     ]
   };
 };

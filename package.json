@@ -6,8 +6,10 @@
   "scripts": {
     "build": "webpack --mode=development -w",
     "start": "nodemon ./src/public/dist/bundle.js",
-    "precommit": "pretty-quick --staged",
-    "ts-node": "ts-node ./src/server.ts"
+    "precommit": "npm run lint:fix && pretty-quick --staged",
+    "ts-node": "ts-node ./src/server.ts",
+    "lint": "tslint --config tslint.json \"{src,__mocks__,__tests__}/**/*.{js,jsx,ts,tsx}\"",
+    "lint:fix": "npm run lint -- --fix"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,8 @@
     "pretty-quick": "^1.10.0",
     "ts-loader": "^5.3.3",
     "ts-node": "^8.0.3",
+    "tslint": "^5.14.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.3333",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
