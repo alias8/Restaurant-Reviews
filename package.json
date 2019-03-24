@@ -6,10 +6,11 @@
   "scripts": {
     "build": "webpack --mode=development -w",
     "start": "nodemon ./src/public/dist/bundle.js",
-    "precommit": "npm run lint:fix && pretty-quick --staged",
+    "precommit": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && npm run lint:fix",
     "ts-node": "ts-node ./src/server.ts",
     "lint": "tslint --project tsconfig.json --config tslint.json",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "prettier-lint-all": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && npm run lint:fix"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "clean-webpack-plugin": "^2.0.1",
     "copy-webpack-plugin": "^5.0.1",
     "nodemon": "^1.18.10",
+    "prettier": "^1.16.4",
     "pretty-quick": "^1.10.0",
     "ts-loader": "^5.3.3",
     "ts-node": "^8.0.3",

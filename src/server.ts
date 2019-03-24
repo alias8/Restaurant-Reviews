@@ -1,5 +1,5 @@
 import App from "./app";
-import { UserController } from './controllers/userController';
+import { UserController } from "./controllers/userController";
 
 const app = new App([new UserController()]);
 
