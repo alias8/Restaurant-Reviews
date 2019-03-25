@@ -7,7 +7,7 @@ export const dump = (obj: {}) => JSON.stringify(obj, null, 2);
 export const staticMap = ([lng, lat]: string[]) =>
   `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=14&size=800x150&key=${
     process.env.MAP_KEY
-    }&markers=${lat},${lng}&scale=2`;
+  }&markers=${lat},${lng}&scale=2`;
 
 // inserting an SVG
 export const icon = (name: string) =>
