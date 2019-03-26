@@ -1,5 +1,5 @@
 import bodyParser from "body-parser";
-import flash from "connect-flash"
+import flash from "connect-flash";
 import express, { Router } from "express";
 import path from "path";
 import * as helpers from "./helpers";
@@ -9,7 +9,7 @@ export interface IController {
   router: Router;
 }
 
-export const publicDirectory = path.join(__dirname, "..") // from the point of view of the bundled file, not app.ts
+export const publicDirectory = path.join(__dirname, ".."); // from the point of view of the bundled file, not app.ts
 export const viewDirectory = path.resolve(__dirname, "..", "..", "views");
 
 class App {
