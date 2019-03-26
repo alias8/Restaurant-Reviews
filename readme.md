@@ -1,11 +1,14 @@
 to start:
+
+connect to mongoDB with MongoDB Compass program
+
+then
+
 npm run build
 
 and
 
 npm run start
 
-
-
 todo:
-1. how does path and dirname work?
+why is prettier and lint fix not working with precommit?

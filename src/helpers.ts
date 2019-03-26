@@ -1,4 +1,5 @@
 import fs from "fs";
+import { publicDirectory } from "./app";
 
 // Dump is a handy debugging function we can use to sort of "console.log" our data
 export const dump = (obj: {}) => JSON.stringify(obj, null, 2);
@@ -10,8 +11,9 @@ export const staticMap = ([lng, lat]: string[]) =>
   }&markers=${lat},${lng}&scale=2`;
 
 // inserting an SVG
-export const icon = (name: string) =>
-  fs.readFileSync(`./public/images/icons/${name}.svg`);
+export const icon = (name: string) => {
+  return fs.readFileSync(`${publicDirectory}/images/icons/${name}.svg`);
+};
 
 // Some details about the site
 export const siteName = `Now That's Delicious!`;
