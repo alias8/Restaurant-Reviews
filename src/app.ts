@@ -3,7 +3,7 @@ import flash from "connect-flash";
 import express, { Router } from "express";
 import path from "path";
 import * as helpers from "./helpers";
-import "./public/sass/style.scss"
+import "./public/sass/style.scss";
 
 export interface IController {
   // path: string;
