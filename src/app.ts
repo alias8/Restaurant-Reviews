@@ -3,6 +3,7 @@ import flash from "connect-flash";
 import express, { Router } from "express";
 import path from "path";
 import * as helpers from "./helpers";
+import "./public/sass/style.scss"
 
 export interface IController {
   // path: string;
@@ -42,10 +43,10 @@ class App {
   private setupMiddleware() {
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
-    this.app.use(flash());
+    // this.app.use(flash());
     this.app.use((req: express.Request, res: express.Response, next) => {
       res.locals.h = helpers;
-      res.locals.flashes = req.flash();
+      // res.locals.flashes = req.flash();
       res.locals.user = (req as any).user || null;
       res.locals.currentPath = req.path;
       next();
