@@ -9,7 +9,7 @@ export class UserController implements IController {
   }
 
   private initializeRoutes() {
-    this.router.get("/", (req, res) => {
+    this.router.get("/", (req: express.Request, res) => {
       return res.render("hello");
     });
   }
