@@ -1,3 +1,4 @@
+/* tslint:disable:object-literal-sort-keys */
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
@@ -14,7 +15,7 @@ module.exports = (env, argv) => {
       __dirname: false,
       __filename: false
     },
-    devtool: "inline-source-map",
+    devtool: "source-map",
     externals: [nodeExternals()],
     output: {
       path: path.resolve(__dirname, "src", "public", "dist"),
@@ -41,22 +42,22 @@ module.exports = (env, argv) => {
                 importLoaders: 2
               }
             },
-            // {
-            //   loader: "postcss-loader",
-            //   options: {
-            //     // ident: "postcss",
-            //     // sourceMap: true,
-            //     plugins() {
-            //       return [autoprefixer()];
-            //     }
-            //   }
-            // },
             {
-              loader: "sass-loader"
-              // options: {
-              //   outputStyle: "expanded",
-              //   sourceMap: true
-              // }
+              loader: "postcss-loader",
+              options: {
+                ident: "postcss",
+                sourceMap: true,
+                plugins() {
+                  return [autoprefixer()];
+                }
+              }
+            },
+            {
+              loader: "sass-loader",
+              options: {
+                outputStyle: "expanded",
+                sourceMap: true
+              }
             }
           ]
         }
@@ -64,7 +65,7 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      new MiniCssExtractPlugin()
+      new MiniCssExtractPlugin({ filename: "style.css" })
     ]
   };
 };
