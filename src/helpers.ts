@@ -4,8 +4,8 @@ import { publicDirectory } from "./app";
 
 export const moment = momentImport;
 
-// Dump is a handy debugging function we can use to sort of "console.log" our data
-export const dump = (obj: {}) => JSON.stringify(obj, null, 2);
+// A handy debugging function we can use to sort of "console.log" our data
+export const print = (obj: {}) => JSON.stringify(obj, null, 2);
 
 // Making a static map is really long - this is a handy helper function to make one
 export const staticMap = ([lng, lat]: string[]) =>

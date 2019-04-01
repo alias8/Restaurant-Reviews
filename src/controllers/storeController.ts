@@ -134,7 +134,7 @@ export class StoreController implements IController {
       request.body,
       {
         new: true, // return new store instead of old
-        runValidators: true
+        runValidators: true // run the validators in schema before saving
       }
     ).exec();
     // 2. redirect them to the store and tell them it worked
