@@ -5,7 +5,7 @@ export function autocomplete(
   latInput: HTMLInputElement | null,
   lngInput: HTMLInputElement | null
 ) {
-  if (!input) {
+  if (!input || !latInput || !lngInput) {
     return;
   }
   const dropdown = new google.maps.places.Autocomplete(input);
@@ -13,8 +13,8 @@ export function autocomplete(
   dropdown.addListener("place_changed", () => {
     const place = dropdown.getPlace();
     if (place && place.geometry) {
-      (latInput as any).value = place.geometry.location.lat();
-      (lngInput as any).value = place.geometry.location.lng();
+      latInput!.value = place.geometry.location.lat().toString();
+      lngInput!.value = place.geometry.location.lng().toString();
     }
   });
   // if someone hits enter on the address field, don't submit the form
