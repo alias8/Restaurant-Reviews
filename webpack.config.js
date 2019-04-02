@@ -7,7 +7,10 @@ const autoprefixer = require("autoprefixer");
 
 module.exports = (env, argv) => {
   return {
-    entry: "./server.ts",
+    entry: {
+      app: "./server.ts",
+      tools: "./util/tools"
+    },
     target: "node",
     mode: argv.mode,
     context: path.resolve(__dirname, "src"),
@@ -19,7 +22,7 @@ module.exports = (env, argv) => {
     externals: [nodeExternals()],
     output: {
       path: path.resolve(__dirname, "src", "public", "dist"),
-      filename: "bundle.js"
+      filename: "[name].bundle.js"
     },
     resolve: {
       extensions: [".ts", ".tsx", ".js", ".jsx"]
