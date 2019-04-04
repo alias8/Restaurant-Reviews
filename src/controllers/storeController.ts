@@ -1,8 +1,9 @@
 import * as express from "express";
 import jimp from "jimp";
 import multer, { Options } from "multer";
+import * as path from "path";
 import uuid from "uuid";
-import { IController } from "../app";
+import { IController, publicDirectory } from "../app";
 import { catchErrors } from "../handlers/errorHandlers";
 import { IStore, Store } from "../models/Store";
 
@@ -73,7 +74,9 @@ export class StoreController implements IController {
     request.body.photo = `${uuid.v4()}.${extension}`;
     const photo = await jimp.read(request.file.buffer);
     await photo.resize(800, jimp.AUTO);
-    await photo.write(`./public/uploads/${request.body.photo}`);
+    await photo.write(
+      path.join(publicDirectory, "uploads", request.body.photo)
+    );
     // once we have written photo to file system
     next();
   };
@@ -147,7 +150,6 @@ export class StoreController implements IController {
     response: express.Response,
     next: express.NextFunction
   ) => {
-    console.log(`params: ${request.params}`);
     const store = await Store.findOne({ slug: request.params.slug }).populate(
       "author"
     );

@@ -57,11 +57,6 @@ const storeSchema = new mongoose.Schema({
   photo: mongoose.Schema.Types.String
 });
 
-export const Store: mongoose.Model<IStore> = mongoose.model<IStore>(
-  "Store",
-  storeSchema
-);
-
 storeSchema.index({
   description: "text",
   name: "text"
@@ -73,12 +68,14 @@ storeSchema.pre("save", async function(next) {
     next();
     return;
   }
-  (this as any).slug = slug((this as any).name);
-  Store.find();
-  const slugRegEx = new RegExp(`^(${(this as any).slug})(-/d*)?`, "i");
+  (this as IStore).slug = slug((this as IStore).name);
+  // find other stores that have a slug of wes, wes-1, wes-2
+  const slugRegEx = new RegExp(`^(${(this as IStore).slug})(-/d*)?`, "i");
   const storesWithSlug = await Store.find({ slug: slugRegEx });
+
   if (storesWithSlug.length) {
-    (this as any).slug = `${(this as any).slug}-${storesWithSlug.length + 1}`;
+    (this as IStore).slug = `${(this as IStore).slug}-${storesWithSlug.length +
+      1}`;
   }
   next();
 });
@@ -90,3 +87,8 @@ storeSchema.statics.getTagsList = function() {
     { $sort: { count: -1 } }
   ]);
 };
+
+export const Store: mongoose.Model<IStore> = mongoose.model<IStore>(
+  "Store",
+  storeSchema
+);
