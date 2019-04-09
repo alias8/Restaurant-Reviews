@@ -64,18 +64,18 @@ storeSchema.index({
 
 // tslint:disable-next-line:only-arrow-functions
 storeSchema.pre("save", async function(next) {
+  const that = this as IStore;
   if (!this.isModified("name")) {
     next();
     return;
   }
-  (this as IStore).slug = slug((this as IStore).name);
+  that.slug = slug(that.name);
   // find other stores that have a slug of wes, wes-1, wes-2
-  const slugRegEx = new RegExp(`^(${(this as IStore).slug})(-/d*)?`, "i");
+  const slugRegEx = new RegExp(`^(${that.slug})((-/d*)?)$`, "i");
   const storesWithSlug = await Store.find({ slug: slugRegEx });
 
   if (storesWithSlug.length) {
-    (this as IStore).slug = `${(this as IStore).slug}-${storesWithSlug.length +
-      1}`;
+    that.slug = `${that.slug}-${storesWithSlug.length + 1}`;
   }
   next();
 });

@@ -65,7 +65,6 @@ export class StoreController implements IController {
     response: express.Response,
     next: express.NextFunction
   ) => {
-    console.log(request);
     if (!request.file) {
       next();
       return;
