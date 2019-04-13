@@ -86,9 +86,9 @@ export class UserController implements IController {
       email: request.body.email,
       name: request.body.name
     });
-    const register = promisify(User.register.bind(User));
+    const register = promisify(User.register.bind(User)); // register method comes from passportLocalMongoose plugin
     await register(user, request.body.password);
-    next();
+    next(); // pass to authController.login
   };
 
   private account = (request: express.Request, response: express.Response) => {

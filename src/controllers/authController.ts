@@ -38,7 +38,7 @@ export class AuthenticationController implements IController {
   }
 
   private initializeRoutes() {
-    this.router.post("login", AuthenticationController.login);
+    this.router.post("/login", AuthenticationController.login);
 
     this.router.get("/logout", this.logout);
     this.router.post("/account/forgot", catchErrors(this.forgot));
@@ -57,7 +57,6 @@ export class AuthenticationController implements IController {
   }
 
   private logout = (request: express.Request, response: express.Response) => {
-    console.log("trying to logout");
     request.logout();
     request.flash("success", "You are now logged out");
     response.redirect("/");
