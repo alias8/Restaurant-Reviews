@@ -1,4 +1,4 @@
 import { autocomplete } from "./autocomplete";
-import { $, $$ } from "./bling";
+import { $ } from "./bling";
 
 autocomplete($("#address"), $("#lat"), $("#lng"));

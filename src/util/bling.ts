@@ -4,23 +4,23 @@ export const $ = document.querySelector.bind(document);
 export const $$ = document.querySelectorAll.bind(document);
 
 (Node.prototype as any).on = (window as any).on = function(
-  name: string,
-  fn: any
+    name: string,
+    fn: any
 ) {
-  this.addEventListener(name, fn);
+    this.addEventListener(name, fn);
 };
 
 (NodeList.prototype as any).__proto__ = Array.prototype; // eslint-disable-line
 
 (NodeList.prototype as any).on = (NodeList.prototype as any).addEventListener = function(
-  name: string,
-  fn: any
+    name: string,
+    fn: any
 ) {
-  this.forEach((elem: any) => {
-    elem.on(name, fn);
-  });
+    this.forEach((elem: any) => {
+        elem.on(name, fn);
+    });
 };
 
 export interface IBling extends HTMLInputElement {
-  on: (keyword: string, handler: (event: any) => void) => void;
+    on: (keyword: string, handler: (event: any) => void) => void;
 }

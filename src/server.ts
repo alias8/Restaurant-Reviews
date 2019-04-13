@@ -7,9 +7,9 @@ import { UserController } from "./controllers/userController";
 dotenv.config({ path: "variables.env" });
 
 const app = new App([
-  new UserController(),
-  new AuthenticationController(),
-  new StoreController()
+    new UserController(),
+    new AuthenticationController(),
+    new StoreController()
 ]);
 
 app.listen();
