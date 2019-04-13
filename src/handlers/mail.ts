@@ -1,7 +1,9 @@
 import htmlToText from "html-to-text";
 import juice from "juice";
 import nodemailer from "nodemailer";
+import * as path from "path";
 import pug from "pug";
+import { publicDirectory, viewDirectory } from "../app";
 import { IUserModel } from "../models/User";
 
 const transport = nodemailer.createTransport({
@@ -17,13 +19,13 @@ const transport = nodemailer.createTransport({
 
 const generateHTML = (filename: string, options = {}) => {
     const html = pug.renderFile(
-        `${__dirname}/../views/email/${filename}.pug`,
+        path.join(viewDirectory, "email", `${filename}.pug`),
         options
     );
     return juice(html);
 };
 
-export const send = async ({
+export const sendEmail = async ({
     user,
     subject,
     resetURL,

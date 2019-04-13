@@ -40,7 +40,7 @@ userSchema.plugin(mongodbErrorHandler as any);
 
 userSchema.virtual("gravatar").get(function() {
     const hash = md5(this.email);
-    return `https://gravatar.coom/avatar/${hash}?s=200`;
+    return `https://gravatar.com/avatar/${hash}?s=200`;
 });
 
 export const User: PassportLocalModel<IUserModel> = model<IUserModel>(

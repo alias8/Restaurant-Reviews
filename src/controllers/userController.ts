@@ -91,8 +91,8 @@ export class UserController implements IController {
             { $set: updates },
             { new: true, runValidators: true, context: "query" }
         );
-        request.flash("success", "updated the profile!");
-        response.redirect("");
+        request.flash("success", "Updated the profile!");
+        response.redirect("/");
     };
 
     private initializeRoutes() {

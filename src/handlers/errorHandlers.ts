@@ -80,7 +80,7 @@ export const developmentErrors = (
     response.status(err.status || 500);
     response.format({
         // Form Submit, Reload the page
-        "application/json": () => response.json(errorDetails), // Ajax call, send JSON back
+        "application/json": () => response.json(errorDetails), // Ajax call, sendEmail JSON back
         // Based on the `Accept` http header
         "text/html": () => {
             response.render("error", errorDetails);

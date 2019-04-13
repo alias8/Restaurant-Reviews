@@ -21,7 +21,11 @@ export interface IController {
     router: Router;
 }
 
-export const publicDirectory = path.join(__dirname, ".."); // from the point of view of the bundled file, not app.ts
+/*
+ * Since this source code is bundled in src/public/dist, we have to refer to
+ * directories in relation to the bundled code, not the typescript files.
+ * */
+export const publicDirectory = path.join(__dirname, "..");
 export const viewDirectory = path.resolve(__dirname, "..", "..", "views");
 
 class App {
@@ -62,7 +66,7 @@ class App {
     private initializeLogins() {
         const MongoStore = mongo(session);
         // Sessions allow us to store data on visitors from request to request
-        // This keeps users logged in and allows us to send flash messages
+        // This keeps users logged in and allows us to sendEmail flash messages
         this.app.use(
             session({
                 name: process.env.KEY,

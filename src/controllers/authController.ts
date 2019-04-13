@@ -5,7 +5,7 @@ import moment from "moment";
 import passport from "passport";
 import { IController } from "../app";
 import { catchErrors } from "../handlers/errorHandlers";
-import { send } from "../handlers/mail";
+import { sendEmail } from "../handlers/mail";
 import { IUserModel, User } from "../models/User";
 import { StoreController } from "./storeController";
 
@@ -36,41 +36,48 @@ export class AuthenticationController implements IController {
     constructor() {
         this.initializeRoutes();
     }
+
     private logout = (request: express.Request, response: express.Response) => {
         request.logout();
         request.flash("success", "You are now logged out");
         response.redirect("/");
     };
+
     private forgot = async (
         request: express.Request,
         response: express.Response
     ) => {
+        /*
+         * keep the output of this function the same whether a user with
+         * that email exists or not
+         * */
+        const finalStage = () => {
+            request.flash("success", "A password reset has been mailed to you");
+            response.redirect("/login");
+        };
+
         // 1 see if user with that email exists
         const user = await this.user.findOne({ email: request.body.email });
         if (!user) {
-            request.flash("success", "A password reset has been mailed to you");
-            return response.redirect("/login");
-        }
-        // 2. set reset tokens and expiry on their account
-        user.resetPasswordToken = crypto.randomBytes(20).toString("hex");
-        user.resetPasswordExpires =
-            moment.now() + moment.duration(1, "hour").asMilliseconds();
-        await user.save();
-        // 3. send back token
-        await send({
-            filename: "password-reset",
-            subject: "Password Reset",
-            user,
+            finalStage();
+        } else {
+            // 2. set reset tokens and expiry on their account
+            user.resetPasswordToken = crypto.randomBytes(20).toString("hex");
+            user.resetPasswordExpires =
+                moment.now() + moment.duration(1, "hour").asMilliseconds();
+            await user.save();
+            // 3. sendEmail back token
+            await sendEmail({
+                filename: "password-reset",
+                subject: "Password Reset",
+                user,
 
-            resetURL: `http://${request.headers.host}/account/reset/${
-                user.resetPasswordToken
-            }`
-        });
-        request.flash(
-            "success",
-            `You have been emailed a password reset link.`
-        );
-        response.redirect("/login");
+                resetURL: `http://${request.headers.host}/account/reset/${
+                    user.resetPasswordToken
+                }`
+            });
+            finalStage();
+        }
     };
     private reset = async (
         request: express.Request,
@@ -123,7 +130,7 @@ export class AuthenticationController implements IController {
 
         if (!user) {
             request.flash("error", "Password resest is invalid or has expired");
-            response.redirect("back");
+            response.redirect("/login");
         } else {
             const setPassword = promisify(user.setPassword.bind(user));
             await setPassword(request.body.password);
@@ -149,7 +156,6 @@ export class AuthenticationController implements IController {
         this.router.post(
             "/account/reset/:token",
             this.confirmPasswords,
-
             catchErrors(this.update)
         );
         this.router.get(
