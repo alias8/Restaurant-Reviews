@@ -6,15 +6,22 @@ import pug from "pug";
 import { publicDirectory, viewDirectory } from "../app";
 import { IUserModel } from "../models/User";
 
+// does not appear to be working, not sure why?
 const transport = nodemailer.createTransport({
     auth: {
         pass: process.env.MAIL_PASS,
         user: process.env.MAIL_USER
     },
+    debug: true,
     host: process.env.MAIL_HOST,
-    port: process.env.MAIL_PORT
+    port: process.env.MAIL_PORT // 25
         ? parseInt(process.env.MAIL_PORT, 10)
-        : undefined
+        : undefined,
+    secure: false,
+    tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
+    }
 });
 
 const generateHTML = (filename: string, options = {}) => {
