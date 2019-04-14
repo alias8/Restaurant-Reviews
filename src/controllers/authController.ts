@@ -37,6 +37,24 @@ export class AuthenticationController implements IController {
         this.initializeRoutes();
     }
 
+    private initializeRoutes() {
+        this.router.post("/login", AuthenticationController.login);
+
+        this.router.get("/logout", this.logout);
+        this.router.post("/account/forgot", catchErrors(this.forgot));
+        this.router.get("/account/reset/:token", catchErrors(this.reset));
+        this.router.post(
+            "/account/reset/:token",
+            this.confirmPasswords,
+            catchErrors(this.update)
+        );
+        this.router.get(
+            "/add",
+            AuthenticationController.isLoggedIn,
+            StoreController.addStore
+        );
+    }
+
     private logout = (request: express.Request, response: express.Response) => {
         request.logout();
         request.flash("success", "You are now logged out");
@@ -146,22 +164,4 @@ export class AuthenticationController implements IController {
             response.redirect("/");
         }
     };
-
-    private initializeRoutes() {
-        this.router.post("/login", AuthenticationController.login);
-
-        this.router.get("/logout", this.logout);
-        this.router.post("/account/forgot", catchErrors(this.forgot));
-        this.router.get("/account/reset/:token", catchErrors(this.reset));
-        this.router.post(
-            "/account/reset/:token",
-            this.confirmPasswords,
-            catchErrors(this.update)
-        );
-        this.router.get(
-            "/add",
-            AuthenticationController.isLoggedIn,
-            StoreController.addStore
-        );
-    }
 }

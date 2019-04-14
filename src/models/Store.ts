@@ -12,7 +12,7 @@ export interface IStore extends mongoose.Document {
         address: string;
     };
     photo: string;
-    author: string;
+    author: mongoose.Types.Buffer;
     getTagsList: () => any;
 }
 

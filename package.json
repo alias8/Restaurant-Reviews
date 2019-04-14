@@ -8,7 +8,9 @@
     "start": "nodemon ./src/public/dist/app.bundle.js",
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",
-    "prettier-lint-all": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && npm run lint:fix"
+    "prettier-lint-all": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && npm run lint:fix",
+    "sample": "ts-node ./src/data/load-sample-data.ts",
+    "blowitallaway": "ts-node ./src/data/load-sample-data.ts --delete"
   },
   "repository": {
     "type": "git",
@@ -62,6 +64,7 @@
     "@types/pug": "^2.0.4",
     "@types/uuid": "^3.4.4",
     "@types/validator": "^10.11.0",
+    "@types/webpack-dev-server": "^3.1.5",
     "autoprefixer": "^9.5.0",
     "clean-webpack-plugin": "^2.0.1",
     "css-loader": "^2.1.1",
@@ -80,9 +83,13 @@
     "typescript": "^3.3.3333",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.3.1",
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "@types/autoprefixer": "^9.4.0",
+    "@types/mini-css-extract-plugin": "^0.2.0",
+    "@types/webpack-node-externals": "^1.6.3",
     "body-parser": "^1.18.3",
     "build": "^0.1.4",
     "connect-flash": "^0.1.1",

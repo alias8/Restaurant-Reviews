@@ -26,7 +26,8 @@ export interface IController {
  * directories in relation to the bundled code, not the typescript files.
  * */
 export const publicDirectory = path.join(__dirname, "..");
-export const viewDirectory = path.resolve(__dirname, "..", "..", "views");
+export const viewDirectory = path.join(__dirname, "..", "..", "views");
+export const rootDirectory = path.join(__dirname, "..", "..", "..");
 
 class App {
     public app: express.Application;

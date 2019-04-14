@@ -11,18 +11,39 @@ export class UserController implements IController {
     constructor() {
         this.initializeRoutes();
     }
+
+    private initializeRoutes() {
+        this.router.get("/login", this.loginForm);
+        this.router.get("/register", this.registerForm);
+        this.router.post(
+            "/register",
+            this.validateRegister,
+            this.register,
+            AuthenticationController.login
+        );
+
+        this.router.get(
+            "/account",
+            AuthenticationController.isLoggedIn,
+            this.account
+        );
+        this.router.post("/account", catchErrors(this.updateAccount));
+    }
+
     private loginForm = (
         request: express.Request,
         response: express.Response
     ) => {
         response.render("login", { title: "Login" });
     };
+
     private registerForm = (
         request: express.Request,
         response: express.Response
     ) => {
         response.render("register", { title: "Register" });
     };
+
     private validateRegister = (
         request: express.Request,
         response: express.Response,
@@ -58,6 +79,7 @@ export class UserController implements IController {
         }
         next(); // there were no errors!
     };
+
     private register = async (
         request: express.Request,
         response: express.Response,
@@ -71,12 +93,14 @@ export class UserController implements IController {
         await register(user, request.body.password);
         next(); // pass to authController.login
     };
+
     private account = (
         request: express.Request,
         response: express.Response
     ) => {
         response.render("account", { title: "Edit your account" });
     };
+
     private updateAccount = async (
         request: express.Request,
         response: express.Response
@@ -94,22 +118,4 @@ export class UserController implements IController {
         request.flash("success", "Updated the profile!");
         response.redirect("/");
     };
-
-    private initializeRoutes() {
-        this.router.get("/login", this.loginForm);
-        this.router.get("/register", this.registerForm);
-        this.router.post(
-            "/register",
-            this.validateRegister,
-            this.register,
-            AuthenticationController.login
-        );
-
-        this.router.get(
-            "/account",
-            AuthenticationController.isLoggedIn,
-            this.account
-        );
-        this.router.post("/account", catchErrors(this.updateAccount));
-    }
 }

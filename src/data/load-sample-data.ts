@@ -1,10 +1,11 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import mongoose from "mongoose";
+import { rootDirectory } from "../app";
 import { Store } from "../models/Store";
 import { User } from "../models/User";
 
-dotenv.config({ path: __dirname + "/../variables.env" });
+dotenv.config({ path: rootDirectory });
 mongoose.connect(process.env.DATABASE || "");
 
 // import all of our models - they need to be imported only once

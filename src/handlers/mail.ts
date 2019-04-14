@@ -14,14 +14,7 @@ const transport = nodemailer.createTransport({
     },
     debug: true,
     host: process.env.MAIL_HOST,
-    port: process.env.MAIL_PORT // 25
-        ? parseInt(process.env.MAIL_PORT, 10)
-        : undefined,
-    secure: false,
-    tls: {
-        // do not fail on invalid certs
-        rejectUnauthorized: false
-    }
+    port: 2525
 });
 
 const generateHTML = (filename: string, options = {}) => {
