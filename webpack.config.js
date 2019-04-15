@@ -1,22 +1,15 @@
 /* tslint:disable:object-literal-sort-keys */
+const path = require("path");
+const nodeExternals = require("webpack-node-externals");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const autoprefixer = require("autoprefixer");
 
-import autoprefixer from "autoprefixer";
-import CleanWebpackPlugin from "clean-webpack-plugin";
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import path from "path";
-import webpack from "webpack";
-import WebpackDevServer from "webpack-dev-server";
-import nodeExternals from "webpack-node-externals";
-
-const config = (
-    env: "development" | "production",
-    argv: any
-): webpack.Configuration => {
+module.exports = (env, argv) => {
     return {
         entry: {
             app: "./server.ts",
-            tools: "./util/tools",
-            data: "./src/data/load-sample-data"
+            tools: "./util/tools"
         },
         target: "node",
         mode: argv.mode,
@@ -44,7 +37,7 @@ const config = (
                     test: /\.s?css$/,
                     use: [
                         {
-                            loader: MiniCssExtractPlugin.loader as string
+                            loader: MiniCssExtractPlugin.loader
                         },
                         {
                             loader: "css-loader",
@@ -79,5 +72,3 @@ const config = (
         ]
     };
 };
-
-const server = webpack(config());
