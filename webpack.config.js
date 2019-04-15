@@ -8,8 +8,9 @@ const autoprefixer = require("autoprefixer");
 module.exports = (env, argv) => {
     return {
         entry: {
-            app: "./server.ts",
-            tools: "./util/tools"
+            app: "./server",
+            tools: "./util/tools",
+            data: "./data/load-sample-data"
         },
         target: "node",
         mode: argv.mode,

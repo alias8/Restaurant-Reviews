@@ -1,6 +1,8 @@
+console.log("james1");
 import dotenv from "dotenv";
 import fs from "fs";
 import mongoose from "mongoose";
+import * as path from "path";
 import { rootDirectory } from "../app";
 import { Store } from "../models/Store";
 import { User } from "../models/User";
@@ -12,13 +14,24 @@ mongoose.connect(process.env.DATABASE || "");
 
 // const Review = require('../models/Review');
 
-const stores = JSON.parse(fs.readFileSync(__dirname + "/stores.json", "utf-8"));
+const stores = JSON.parse(
+    fs.readFileSync(
+        path.join(rootDirectory, "src", "data", "stores.json"),
+        "utf-8"
+    )
+);
 // const reviews = JSON.parse(fs.readFileSync(__dirname + '/reviews.json', 'utf-8'));
-const users = JSON.parse(fs.readFileSync(__dirname + "/users.json", "utf-8"));
+const users = JSON.parse(
+    fs.readFileSync(
+        path.join(rootDirectory, "src", "data", "users.json"),
+        "utf-8"
+    )
+);
 
 async function deleteData() {
     console.log("😢😢 Goodbye Data...");
     await Store.remove({});
+    console.log("1111");
     // await Review.remove();
     await User.remove({});
     console.log(
@@ -43,7 +56,11 @@ async function loadData() {
     }
 }
 
-if (process.argv[0].includes("--delete")) {
+process.argv.forEach(arg => {
+    console.log(`james ${arg}`);
+});
+
+if (process.argv.includes("--delete")) {
     deleteData();
 } else {
     loadData();

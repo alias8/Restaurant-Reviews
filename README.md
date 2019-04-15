@@ -1,14 +1,8 @@
-to start:
+## to start:
 
-connect to mongoDB with MongoDB Compass program
-
-then
-
-npm run build
-
-and
-
-npm run start
+```bash
+npm run dev
+```
 
 To load sample data, run the following command in your terminal:
 
