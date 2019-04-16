@@ -1,4 +1,3 @@
-console.log("james1");
 import dotenv from "dotenv";
 import fs from "fs";
 import mongoose from "mongoose";
@@ -7,7 +6,7 @@ import { rootDirectory } from "../app";
 import { Store } from "../models/Store";
 import { User } from "../models/User";
 
-dotenv.config({ path: rootDirectory });
+dotenv.config({ path: path.join(rootDirectory, "variables.env") });
 mongoose.connect(process.env.DATABASE || "");
 
 // import all of our models - they need to be imported only once
@@ -30,8 +29,7 @@ const users = JSON.parse(
 
 async function deleteData() {
     console.log("😢😢 Goodbye Data...");
-    await Store.remove({});
-    console.log("1111");
+    await Store.deleteMany({});
     // await Review.remove();
     await User.remove({});
     console.log(
@@ -55,10 +53,6 @@ async function loadData() {
         process.exit();
     }
 }
-
-process.argv.forEach(arg => {
-    console.log(`james ${arg}`);
-});
 
 if (process.argv.includes("--delete")) {
     deleteData();
