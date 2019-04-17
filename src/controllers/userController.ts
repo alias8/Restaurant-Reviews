@@ -1,5 +1,5 @@
 import { promisify } from "es6-promisify";
-import * as express from "express";
+import express from "express";
 import { IController } from "../app";
 import { catchErrors } from "../handlers/errorHandlers";
 import { User } from "../models/User";

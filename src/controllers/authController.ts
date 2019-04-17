@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { promisify } from "es6-promisify";
-import * as express from "express";
+import express from "express";
 import moment from "moment";
 import passport from "passport";
 import { IController } from "../app";

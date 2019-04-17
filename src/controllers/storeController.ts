@@ -1,7 +1,7 @@
-import * as express from "express";
+import express from "express";
 import jimp from "jimp";
 import multer, { Options } from "multer";
-import * as path from "path";
+import path from "path";
 import uuid from "uuid";
 import { IController, publicDirectory } from "../app";
 import { catchErrors } from "../handlers/errorHandlers";

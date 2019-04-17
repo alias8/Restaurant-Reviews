@@ -90,7 +90,10 @@ class App {
     private connectToTheDatabase() {
         mongoose.Promise = global.Promise;
         mongoose
-            .connect(process.env.DATABASE || "")
+            .connect(process.env.DATABASE || "", {
+                useCreateIndex: true,
+                useNewUrlParser: true
+            })
             .then(() => {
                 /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
             })

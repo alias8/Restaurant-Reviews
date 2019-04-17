@@ -1,7 +1,7 @@
 import htmlToText from "html-to-text";
 import juice from "juice";
 import nodemailer from "nodemailer";
-import * as path from "path";
+import path from "path";
 import pug from "pug";
 import { publicDirectory, viewDirectory } from "../app";
 import { IUserModel } from "../models/User";

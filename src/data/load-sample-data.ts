@@ -1,13 +1,16 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import mongoose from "mongoose";
-import * as path from "path";
+import path from "path";
 import { rootDirectory } from "../app";
 import { Store } from "../models/Store";
 import { User } from "../models/User";
 
 dotenv.config({ path: path.join(rootDirectory, "variables.env") });
-mongoose.connect(process.env.DATABASE || "");
+mongoose.connect(process.env.DATABASE || "", {
+    useCreateIndex: true,
+    useNewUrlParser: true
+});
 
 // import all of our models - they need to be imported only once
 
@@ -29,9 +32,9 @@ const users = JSON.parse(
 
 async function deleteData() {
     console.log("😢😢 Goodbye Data...");
-    await Store.deleteMany({});
+    await Store.deleteMany({ name: /.*/ });
     // await Review.remove();
-    await User.remove({});
+    await User.deleteMany({ name: /.*/ });
     console.log(
         "Data Deleted. To load sample data, run\n\n\t npm run sample\n\n"
     );

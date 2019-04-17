@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import * as path from "path";
+import path from "path";
 import App, { rootDirectory } from "./app";
 import { AuthenticationController } from "./controllers/authController";
 import { StoreController } from "./controllers/storeController";

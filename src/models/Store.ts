@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import mongoose from "mongoose";
 import slug from "slugs";
 
 export interface IStore extends mongoose.Document {
@@ -65,7 +65,7 @@ storeSchema.index({
 // tslint:disable-next-line:only-arrow-functions
 storeSchema.pre("save", async function(next) {
     const that = this as IStore;
-    if (!this.isModified("name")) {
+    if (!that.isModified("name")) {
         next();
         return;
     }
