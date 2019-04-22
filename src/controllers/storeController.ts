@@ -140,6 +140,7 @@ export class StoreController implements IController {
         response: express.Response
     ) => {
         // 1. find and update the store
+        console.log(`james 44 ${JSON.stringify(request.body)}`);
         request.body.location.type = "Point";
         const store = await Store.findOneAndUpdate(
             { _id: request.params.id },
@@ -186,6 +187,28 @@ export class StoreController implements IController {
         request: express.Request,
         response: express.Response
     ) => {
-        response.json(request.query);
+        const stores = await Store
+            // find stores that match
+            .find(
+                {
+                    $text: {
+                        $search: request.query.q
+                    }
+                },
+                {
+                    score: {
+                        $meta: "textScore"
+                    }
+                }
+            )
+            // then sort them
+            .sort({
+                score: {
+                    $meta: "textScore"
+                }
+            })
+            // limit to 5 result
+            .limit(5);
+        response.json(stores);
     };
 }

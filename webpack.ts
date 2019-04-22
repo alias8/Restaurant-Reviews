@@ -1,26 +1,22 @@
 /* tslint:disable:object-literal-sort-keys */
-const path = require("path");
-const nodeExternals = require("webpack-node-externals");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const autoprefixer = require("autoprefixer");
+import autoprefixer from "autoprefixer";
+import CleanWebpackPlugin from "clean-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import path from "path";
+import webpack = require("webpack");
+import { Stats } from "webpack";
+import nodeExternals from "webpack-node-externals";
 
-module.exports = (env, argv) => {
+const baseConfig = (): webpack.Configuration => {
     return {
-        entry: {
-            app: "./server",
-            tools: "./util/tools",
-            data: "./data/load-sample-data"
-        },
-        target: "node",
-        mode: argv.mode,
+        mode: "development",
         context: path.resolve(__dirname, "src"),
         node: {
             __dirname: false,
             __filename: false
         },
+        watch: true,
         devtool: "source-map",
-        externals: [nodeExternals()],
         output: {
             path: path.resolve(__dirname, "src", "public", "dist"),
             filename: "[name].bundle.js"
@@ -38,7 +34,7 @@ module.exports = (env, argv) => {
                     test: /\.s?css$/,
                     use: [
                         {
-                            loader: MiniCssExtractPlugin.loader
+                            loader: MiniCssExtractPlugin.loader as string
                         },
                         {
                             loader: "css-loader",
@@ -73,3 +69,53 @@ module.exports = (env, argv) => {
         ]
     };
 };
+
+const generateWebpackConfigNode = (): webpack.Configuration => {
+    return {
+        ...baseConfig(),
+        entry: {
+            app: "./server",
+            data: "./data/load-sample-data"
+        },
+        target: "node",
+        externals: [nodeExternals()]
+    };
+};
+
+const generateWebpackConfigBrowser = (): webpack.Configuration => {
+    return {
+        ...baseConfig(),
+        entry: {
+            tools: "./util/tools"
+        },
+        target: "web"
+    };
+};
+
+const handleErrors = (err: Error, stats: Stats) => {
+    if (err) {
+        console.error(err.stack || err);
+        if ((err as any).details) {
+            console.error((err as any).details);
+        }
+        return;
+    }
+
+    const info = stats.toJson();
+
+    if (stats.hasErrors()) {
+        console.error(info.errors);
+    }
+
+    if (stats.hasWarnings()) {
+        console.warn(info.warnings);
+    }
+};
+
+webpack(generateWebpackConfigNode(), (err: Error, stats: Stats) => {
+    handleErrors(err, stats);
+});
+
+webpack(generateWebpackConfigBrowser(), (err: Error, stats: Stats) => {
+    handleErrors(err, stats);
+});

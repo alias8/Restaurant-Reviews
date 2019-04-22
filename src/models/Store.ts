@@ -1,3 +1,4 @@
+import dompurify from "dompurify";
 import mongoose from "mongoose";
 import slug from "slugs";
 
@@ -60,6 +61,21 @@ const storeSchema = new mongoose.Schema({
 storeSchema.index({
     description: "text",
     name: "text"
+});
+
+// tslint:disable-next-line:only-arrow-functions
+storeSchema.pre("validate", async function(next) {
+    // todo: somehow validate / sanitise using a pre hook or a validation option in the schema
+    console.log("james 3");
+    const that = this;
+    that.validateSync();
+
+    const purify = dompurify.sanitize(that.name);
+    console.log(`james1 ${that.name}`);
+    console.log(`james2 ${purify}`);
+    that.name = dompurify.sanitize(that.name);
+
+    next();
 });
 
 // tslint:disable-next-line:only-arrow-functions
