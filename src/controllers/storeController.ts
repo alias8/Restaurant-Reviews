@@ -56,6 +56,8 @@ export class StoreController implements IController {
         this.router.get("/tags", catchErrors(this.getStoresByTag));
         this.router.get("/tags/:tag", catchErrors(this.getStoresByTag));
         this.router.get("/api/search", catchErrors(this.searchStores));
+        this.router.get("/api/stores/near", catchErrors(this.mapStores));
+        this.router.get("/map", catchErrors(this.mapPage));
         this.router.get("/", catchErrors(this.getStores));
         this.router.get("/stores", catchErrors(this.getStores));
     }
@@ -210,5 +212,36 @@ export class StoreController implements IController {
             // limit to 5 result
             .limit(5);
         response.json(stores);
+    };
+
+    private mapStores = async (
+        request: express.Request,
+        response: express.Response
+    ) => {
+        const coordinates = [request.query.lng, request.query.lat].map(
+            parseFloat
+        );
+        const query = {
+            location: {
+                $near: {
+                    $geometry: {
+                        coordinates,
+                        type: "Point"
+                    },
+                    $maxDistance: 10000 // 10km
+                }
+            }
+        };
+        const stores = await Store.find(query)
+            .select("slug name description location")
+            .limit(10);
+        response.json(stores);
+    };
+
+    private mapPage = async (
+        request: express.Request,
+        response: express.Response
+    ) => {
+        response.render("map", { title: "Map" });
     };
 }

@@ -63,6 +63,10 @@ storeSchema.index({
     name: "text"
 });
 
+storeSchema.index({
+    location: "2dsphere"
+});
+
 // tslint:disable-next-line:only-arrow-functions
 storeSchema.pre("validate", async function(next) {
     // todo: somehow validate / sanitise using a pre hook or a validation option in the schema
