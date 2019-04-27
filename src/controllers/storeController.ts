@@ -144,30 +144,20 @@ export class StoreController implements IController {
     ) => {
         // 1. find and update the store
         request.body.location.type = "Point";
+        /*
+         * don't use findOneAndUpdate() because it won't trigger the
+         * 'save' prehook which sanitizes the data
+         * */
         const oldStore = await Store.findOne({ _id: request.params.id });
 
         if (oldStore) {
             oldStore.name = request.body.name;
-            const sanitized = DOMPurify.sanitize(request.body.name);
-            if (sanitized.length !== request.body.name.length) {
-                throw Error(`1We got ${sanitized}`);
-            } else {
-                console.log(`2we got ${sanitized}`);
-            }
+            oldStore.description = request.body.description;
+            oldStore.location.address = request.body.description;
             const newStore = await oldStore.save();
             request.flash("success", `Successfully updated ${newStore!.name}`);
             response.redirect(`/stores/${newStore!._id}/edit`);
         }
-
-        // const newStore = await Store.updateOne(
-        //     { _id: request.params.id },
-        //     request.body,
-        //     {
-        //         new: true, // return new store instead of old
-        //         runValidators: true // run the validators in schema before saving
-        //     }
-        // )
-        // 2. redirect them to the store and tell them it worked
     };
 
     private getStoreBySlug = async (

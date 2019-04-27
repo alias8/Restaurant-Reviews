@@ -1,6 +1,7 @@
 import dompurify from "dompurify";
 import mongoose from "mongoose";
 import slug from "slugs";
+import { DOMPurify } from "../helpers";
 
 export interface IStore extends mongoose.Document {
     name: string;
@@ -71,8 +72,6 @@ storeSchema.index({
 storeSchema.pre("validate", async function(next) {
     // todo: somehow validate / sanitise using a pre hook or a validation option in the schema
     this.validateSync();
-    // const purify = dompurify.sanitize(that.name);
-    // that.name = dompurify.sanitize(that.name);
     next();
 });
 
@@ -92,6 +91,11 @@ storeSchema.pre("save", async function(next) {
     if (storesWithSlug.length) {
         that.slug = `${that.slug}-${storesWithSlug.length + 1}`;
     }
+
+    // sanitize all text inputs
+    that.name = DOMPurify.sanitize(that.name);
+    that.description = DOMPurify.sanitize(that.description);
+    that.location.address = DOMPurify.sanitize(that.description);
 
     next();
 });
