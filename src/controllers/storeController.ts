@@ -1,14 +1,13 @@
 import express from "express";
 import jimp from "jimp";
-import * as moment from "moment";
 import multer, { Options } from "multer";
 import path from "path";
 import uuid from "uuid";
 import { IController, publicDirectory } from "../app";
 import { catchErrors } from "../handlers/errorHandlers";
+import { DOMPurify } from "../helpers";
 import { IStore, Store } from "../models/Store";
 import { IUserModel } from "../models/User";
-import _date = moment.unitOfTime._date;
 
 export class StoreController implements IController {
     public static addStore = (
@@ -144,19 +143,31 @@ export class StoreController implements IController {
         response: express.Response
     ) => {
         // 1. find and update the store
-        console.log(`james 44 ${JSON.stringify(request.body)}`);
         request.body.location.type = "Point";
-        const store = await Store.findOneAndUpdate(
-            { _id: request.params.id },
-            request.body,
-            {
-                new: true, // return new store instead of old
-                runValidators: true // run the validators in schema before saving
+        const oldStore = await Store.findOne({ _id: request.params.id });
+
+        if (oldStore) {
+            oldStore.name = request.body.name;
+            const sanitized = DOMPurify.sanitize(request.body.name);
+            if (sanitized.length !== request.body.name.length) {
+                throw Error(`1We got ${sanitized}`);
+            } else {
+                console.log(`2we got ${sanitized}`);
             }
-        ).exec();
+            const newStore = await oldStore.save();
+            request.flash("success", `Successfully updated ${newStore!.name}`);
+            response.redirect(`/stores/${newStore!._id}/edit`);
+        }
+
+        // const newStore = await Store.updateOne(
+        //     { _id: request.params.id },
+        //     request.body,
+        //     {
+        //         new: true, // return new store instead of old
+        //         runValidators: true // run the validators in schema before saving
+        //     }
+        // )
         // 2. redirect them to the store and tell them it worked
-        request.flash("success", `Successfully updated ${store!.name}`);
-        response.redirect(`/stores/${store!._id}/edit`);
     };
 
     private getStoreBySlug = async (

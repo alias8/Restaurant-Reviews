@@ -70,8 +70,7 @@ storeSchema.index({
 // tslint:disable-next-line:only-arrow-functions console.log("hello")
 storeSchema.pre("validate", async function(next) {
     // todo: somehow validate / sanitise using a pre hook or a validation option in the schema
-    const that = this;
-    that.validateSync();
+    this.validateSync();
     // const purify = dompurify.sanitize(that.name);
     // that.name = dompurify.sanitize(that.name);
     next();
@@ -80,10 +79,11 @@ storeSchema.pre("validate", async function(next) {
 // tslint:disable-next-line:only-arrow-functions
 storeSchema.pre("save", async function(next) {
     const that = this as IStore;
-    if (!that.isModified("name")) {
+    if (!this.isModified("name")) {
         next();
         return;
     }
+
     that.slug = slug(that.name);
     // find other stores that have a slug of wes, wes-1, wes-2
     const slugRegEx = new RegExp(`^(${that.slug})((-/d*)?)$`, "i");
@@ -92,6 +92,7 @@ storeSchema.pre("save", async function(next) {
     if (storesWithSlug.length) {
         that.slug = `${that.slug}-${storesWithSlug.length + 1}`;
     }
+
     next();
 });
 

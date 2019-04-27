@@ -2,6 +2,10 @@ import fs from "fs";
 import momentImport from "moment";
 import { publicDirectory } from "./app";
 
+import createDOMPurify from "dompurify";
+
+import { JSDOM } from "jsdom";
+
 export const moment = momentImport;
 
 // A handy debugging function we can use to sort of "console.log" our data
@@ -28,3 +32,8 @@ export const menu = [
     { slug: "/add", title: "Add", icon: "add" },
     { slug: "/map", title: "Map", icon: "map" }
 ];
+
+// set up dompurify for nodejs
+const window = new JSDOM("").window;
+// @ts-ignore
+export const DOMPurify = createDOMPurify(window);
