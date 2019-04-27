@@ -1,5 +1,6 @@
 import express from "express";
 import jimp from "jimp";
+import * as moment from "moment";
 import multer, { Options } from "multer";
 import path from "path";
 import uuid from "uuid";
@@ -7,6 +8,7 @@ import { IController, publicDirectory } from "../app";
 import { catchErrors } from "../handlers/errorHandlers";
 import { IStore, Store } from "../models/Store";
 import { IUserModel } from "../models/User";
+import _date = moment.unitOfTime._date;
 
 export class StoreController implements IController {
     public static addStore = (
@@ -233,7 +235,7 @@ export class StoreController implements IController {
             }
         };
         const stores = await Store.find(query)
-            .select("slug name description location")
+            .select("slug name description location photo")
             .limit(10);
         response.json(stores);
     };

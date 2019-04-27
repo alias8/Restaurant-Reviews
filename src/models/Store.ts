@@ -67,18 +67,13 @@ storeSchema.index({
     location: "2dsphere"
 });
 
-// tslint:disable-next-line:only-arrow-functions
+// tslint:disable-next-line:only-arrow-functions console.log("hello")
 storeSchema.pre("validate", async function(next) {
     // todo: somehow validate / sanitise using a pre hook or a validation option in the schema
-    console.log("james 3");
     const that = this;
     that.validateSync();
-
-    const purify = dompurify.sanitize(that.name);
-    console.log(`james1 ${that.name}`);
-    console.log(`james2 ${purify}`);
-    that.name = dompurify.sanitize(that.name);
-
+    // const purify = dompurify.sanitize(that.name);
+    // that.name = dompurify.sanitize(that.name);
     next();
 });
 

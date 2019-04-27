@@ -112,10 +112,10 @@ const handleErrors = (err: Error, stats: Stats) => {
     }
 };
 
-webpack(generateWebpackConfigNode(), (err: Error, stats: Stats) => {
-    handleErrors(err, stats);
-});
-
-webpack(generateWebpackConfigBrowser(), (err: Error, stats: Stats) => {
-    handleErrors(err, stats);
-});
+webpack(
+    [generateWebpackConfigNode(), generateWebpackConfigBrowser()],
+    async (err: Error, stats: Stats) => {
+        handleErrors(err, stats);
+        console.log(stats.toString());
+    }
+);
