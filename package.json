@@ -10,8 +10,8 @@
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",
     "prettier-lint-all": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && npm run lint:fix",
-    "sample": "webpack --mode=development && node ./src/public/dist/data.bundle.js",
-    "blowitallaway": "webpack --mode=development && node ./src/public/dist/data.bundle.js --delete"
+    "sample": "node ./src/public/dist/data.bundle.js",
+    "blowitallaway": "node ./src/public/dist/data.bundle.js --delete"
   },
   "repository": {
     "type": "git",

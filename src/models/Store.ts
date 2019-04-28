@@ -18,7 +18,7 @@ export interface IStore extends mongoose.Document {
     getTagsList: () => any;
 }
 
-const storeSchema = new mongoose.Schema({
+const storeSchema = new mongoose.Schema<IStore>({
     author: {
         ref: "User",
         required: "You must supply an author",

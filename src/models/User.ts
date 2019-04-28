@@ -15,9 +15,10 @@ export interface IUserModel extends PassportLocalDocument {
     name: string;
     resetPasswordToken: string | undefined;
     resetPasswordExpires: number | undefined;
+    hearts: mongoose.Schema.Types.ObjectId[];
 }
 
-const userSchema = new Schema({
+const userSchema = new Schema<IUserModel>({
     email: {
         lowercase: true,
         required: "Please supply an email address",
@@ -26,6 +27,7 @@ const userSchema = new Schema({
         unique: true,
         validate: [validator.isEmail, "Invalid Email Address"]
     },
+    hearts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Store" }],
     name: {
         required: "Please supply a name",
         trim: true,

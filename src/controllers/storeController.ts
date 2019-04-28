@@ -7,7 +7,8 @@ import { IController, publicDirectory } from "../app";
 import { catchErrors } from "../handlers/errorHandlers";
 import { DOMPurify } from "../helpers";
 import { IStore, Store } from "../models/Store";
-import { IUserModel } from "../models/User";
+import { IUserModel, User } from "../models/User";
+import { AuthenticationController } from "./authController";
 
 export class StoreController implements IController {
     public static addStore = (
@@ -58,6 +59,12 @@ export class StoreController implements IController {
         this.router.get("/tags/:tag", catchErrors(this.getStoresByTag));
         this.router.get("/api/search", catchErrors(this.searchStores));
         this.router.get("/api/stores/near", catchErrors(this.mapStores));
+        this.router.post("/api/stores/:id/heart", catchErrors(this.heartStore));
+        this.router.post(
+            "/hearts",
+            AuthenticationController.isLoggedIn,
+            catchErrors(this.getHearts)
+        );
         this.router.get("/map", catchErrors(this.mapPage));
         this.router.get("/", catchErrors(this.getStores));
         this.router.get("/stores", catchErrors(this.getStores));
@@ -239,6 +246,35 @@ export class StoreController implements IController {
             .select("slug name description location photo")
             .limit(10);
         response.json(stores);
+    };
+
+    private heartStore = async (
+        request: express.Request,
+        response: express.Response
+    ) => {
+        // find store with that id
+        const hearts = request.user.hearts.map((obj: any) => {
+            return obj.toString();
+        });
+        const operator = hearts.includes(request.params.id)
+            ? "$pull"
+            : "$addToSet";
+        const user = await User.findByIdAndUpdate(
+            request.user._id,
+            { [operator]: { hearts: request.params.id } },
+            { new: true }
+        );
+        response.json(user);
+    };
+
+    private getHearts = async (
+        request: express.Request,
+        response: express.Response
+    ) => {
+        const stores = await Store.find({
+            _id: { $in: request.user.hearts }
+        });
+        response.render("stores", { title: "Hearted Stores" });
     };
 
     private mapPage = async (
