@@ -1,10 +1,21 @@
 import mongoose from "mongoose";
 
+export interface IReview extends mongoose.Document {
+    author: mongoose.Types.Buffer;
+    created: mongoose.Schema.Types.Date;
+    rating: {
+        max: 5;
+        min: 0;
+    };
+    store: mongoose.Types.Buffer;
+    text: mongoose.Schema.Types.String;
+}
+
 const reviewSchema = new mongoose.Schema({
     author: {
         ref: "User",
         required: "You must supply an author!",
-        type: mongoose.Schema.Types.Date
+        type: mongoose.Schema.Types.ObjectId
     },
     created: {
         default: Date.now(),
@@ -34,4 +45,7 @@ function autopopulate(next: any) {
 reviewSchema.pre("find", autopopulate);
 reviewSchema.pre("findOne", autopopulate);
 
-module.exports = mongoose.model("Review", reviewSchema);
+export const Review: mongoose.Model<IReview> = mongoose.model<IReview>(
+    "Review",
+    reviewSchema
+);

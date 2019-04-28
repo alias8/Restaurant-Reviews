@@ -68,6 +68,13 @@ storeSchema.index({
     location: "2dsphere"
 });
 
+// find reviews where the stores _id property === reviews store property
+storeSchema.virtual("reviews", {
+    foreignField: "store",
+    localField: "_id",
+    ref: "Review"
+});
+
 // tslint:disable-next-line:only-arrow-functions console.log("hello")
 storeSchema.pre("validate", async function(next) {
     // todo: somehow validate / sanitise using a pre hook or a validation option in the schema
