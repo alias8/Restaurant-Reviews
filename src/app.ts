@@ -9,25 +9,17 @@ import expressValidator from "express-validator";
 import mongoose from "mongoose";
 import { AddressInfo } from "net";
 import passport from "passport";
-import path from "path";
 import * as helpers from "./helpers";
 import "./public/sass/style.scss";
 
 import * as errorHandlers from "./handlers/errorHandlers";
 import { User } from "./models/User";
+import { publicDirectory, viewDirectory } from "./paths";
 
 export interface IController {
     // path: string;
     router: Router;
 }
-
-/*
- * Since this source code is bundled in src/public/dist, we have to refer to
- * directories in relation to the bundled code, not the typescript files.
- * */
-export const publicDirectory = path.join(__dirname, "..");
-export const viewDirectory = path.join(__dirname, "..", "..", "views");
-export const rootDirectory = path.join(__dirname, "..", "..", "..");
 
 class App {
     public app: express.Application;

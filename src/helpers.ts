@@ -1,6 +1,6 @@
 import fs from "fs";
 import momentImport from "moment";
-import { publicDirectory } from "./app";
+import { publicDirectory } from "./paths";
 
 import createDOMPurify from "dompurify";
 

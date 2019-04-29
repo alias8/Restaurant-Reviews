@@ -3,8 +3,9 @@ import juice from "juice";
 import nodemailer from "nodemailer";
 import path from "path";
 import pug from "pug";
-import { publicDirectory, viewDirectory } from "../app";
 import { IUserModel } from "../models/User";
+import { viewDirectory } from "../paths";
+import { publicDirectory } from "../paths";
 
 // does not appear to be working, not sure why?
 const transport = nodemailer.createTransport({

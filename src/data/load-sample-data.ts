@@ -2,9 +2,9 @@ import dotenv from "dotenv";
 import fs from "fs";
 import mongoose from "mongoose";
 import path from "path";
-import { rootDirectory } from "../app";
 import { Store } from "../models/Store";
 import { User } from "../models/User";
+import { rootDirectory } from "../paths";
 
 dotenv.config({ path: path.join(rootDirectory, "variables.env") });
 mongoose.connect(process.env.DATABASE || "", {

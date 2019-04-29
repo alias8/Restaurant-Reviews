@@ -3,11 +3,12 @@ import jimp from "jimp";
 import multer, { Options } from "multer";
 import path from "path";
 import uuid from "uuid";
-import { IController, publicDirectory } from "../app";
+import { IController } from "../app";
 import { catchErrors } from "../handlers/errorHandlers";
 import { DOMPurify } from "../helpers";
 import { IStore, Store } from "../models/Store";
 import { IUserModel, User } from "../models/User";
+import { publicDirectory } from "../paths";
 import { AuthenticationController } from "./authController";
 
 export class StoreController implements IController {
