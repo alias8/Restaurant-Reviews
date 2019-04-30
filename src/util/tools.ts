@@ -10,6 +10,9 @@ typeAhead($(".search"));
 
 makeMap($("#map"));
 
-const heartForms = $$("form.heart")[0];
-(heartForms as IBling).on("submit", ajaxHeart);
-console.log(heartForms);
+const heartForms = $$("form.heart");
+if (heartForms.length > 0) {
+    heartForms.forEach(heartForm => {
+        (heartForm as IBling).on("submit", ajaxHeart);
+    });
+}

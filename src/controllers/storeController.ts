@@ -175,7 +175,7 @@ export class StoreController implements IController {
     ) => {
         const store = await Store.findOne({
             slug: request.params.slug
-        }).populate("author");
+        }).populate("author reviews"); // populate means insert the entire author and reviews objects, not just their ids
         if (!store) {
             next();
             return;

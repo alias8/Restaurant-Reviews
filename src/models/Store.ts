@@ -18,46 +18,52 @@ export interface IStore extends mongoose.Document {
     getTagsList: () => any;
 }
 
-const storeSchema = new mongoose.Schema<IStore>({
-    author: {
-        ref: "User",
-        required: "You must supply an author",
-        type: mongoose.Schema.Types.ObjectId
-    },
-    created: {
-        default: Date.now(),
-        type: mongoose.Schema.Types.Date
-    },
-    description: {
-        trim: true,
-        type: mongoose.Schema.Types.String
-    },
-    location: {
-        address: {
-            required: "You must supply an address!",
+const storeSchema = new mongoose.Schema<IStore>(
+    {
+        author: {
+            ref: "User",
+            required: "You must supply an author",
+            type: mongoose.Schema.Types.ObjectId
+        },
+        created: {
+            default: Date.now(),
+            type: mongoose.Schema.Types.Date
+        },
+        description: {
+            trim: true,
             type: mongoose.Schema.Types.String
         },
-        coordinates: [
-            {
-                required: "You must supply coordinates!",
-                type: mongoose.Schema.Types.Number
+        location: {
+            address: {
+                required: "You must supply an address!",
+                type: mongoose.Schema.Types.String
+            },
+            coordinates: [
+                {
+                    required: "You must supply coordinates!",
+                    type: mongoose.Schema.Types.Number
+                }
+            ],
+            type: {
+                default: "Point",
+                type: mongoose.Schema.Types.String
             }
-        ],
-        type: {
-            default: "Point",
+        },
+        name: {
+            required: "Please enter a store name",
+            trim: true,
             type: mongoose.Schema.Types.String
-        }
-    },
-    name: {
-        required: "Please enter a store name",
-        trim: true,
-        type: mongoose.Schema.Types.String
-    },
-    slug: mongoose.Schema.Types.String,
-    tags: [mongoose.Schema.Types.String],
+        },
+        slug: mongoose.Schema.Types.String,
+        tags: [mongoose.Schema.Types.String],
 
-    photo: mongoose.Schema.Types.String
-});
+        photo: mongoose.Schema.Types.String
+    },
+    {
+        toJSON: { virtuals: true }, // print virtual fields
+        toObject: { virtuals: true }
+    }
+);
 
 storeSchema.index({
     description: "text",
@@ -68,11 +74,18 @@ storeSchema.index({
     location: "2dsphere"
 });
 
+/*
+ * We want a field on the Store schema that is an array of all reviews for
+ * this store. The Review schema already has a field for the store, and
+ * if we set a manual field in Store schema to remember all the reviews
+ * we will be managing data in two places. Using a virtual field will
+ * query for us the relevant fields.
+ * */
 // find reviews where the stores _id property === reviews store property
 storeSchema.virtual("reviews", {
-    foreignField: "store",
-    localField: "_id",
-    ref: "Review"
+    foreignField: "store", // the field on the Review to match with the localField
+    localField: "_id", // the field on our Store that needs to match with our foreignField
+    ref: "Review" // the model to link
 });
 
 // tslint:disable-next-line:only-arrow-functions console.log("hello")

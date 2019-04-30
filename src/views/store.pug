@@ -3,6 +3,7 @@ extends layout
 include mixins/_reviewForm
 
 block content
+    pre=h.print(store)
     .single
         .single__hero
             img.single__image(src=`/uploads/${store.photo || 'store.png'}`)
@@ -23,3 +24,9 @@ block content
 
         if user
             +reviewForm(store)
+
+        if store.reviews
+            .reviews
+                each review in store.reviews
+                    .review
+                        p=review.text
