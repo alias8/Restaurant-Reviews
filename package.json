@@ -13,6 +13,9 @@
     "sample": "node ./src/public/dist/data.bundle.js",
     "blowitallaway": "node ./src/public/dist/data.bundle.js --delete"
   },
+  "now": {
+    "dotenv": "variables.env.now"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alias8/LearnNode-TS.git"
