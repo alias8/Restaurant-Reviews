@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 import mongoose from "mongoose";
 import path from "path";
+import { Review } from "../models/Review";
 import { Store } from "../models/Store";
 import { User } from "../models/User";
 import { rootDirectory } from "../paths";
@@ -22,7 +23,12 @@ const stores = JSON.parse(
         "utf-8"
     )
 );
-// const reviews = JSON.parse(fs.readFileSync(__dirname + '/reviews.json', 'utf-8'));
+const reviews = JSON.parse(
+    fs.readFileSync(
+        path.join(rootDirectory, "src", "data", "reviews.json"),
+        "utf-8"
+    )
+);
 const users = JSON.parse(
     fs.readFileSync(
         path.join(rootDirectory, "src", "data", "users.json"),
@@ -44,7 +50,7 @@ async function deleteData() {
 async function loadData() {
     try {
         await Store.insertMany(stores);
-        // await Review.insertMany(reviews);
+        await Review.insertMany(reviews);
         await User.insertMany(users);
         console.log("👍👍👍👍👍👍👍👍 Done!");
         process.exit();

@@ -1,9 +1,9 @@
 import axios from "axios";
 import dompurify from "dompurify";
-import { IStore } from "../models/Store";
+import { IStoreDocument } from "../models/Store";
 import { IBling } from "./bling";
 
-export function searchResultsHTML(stores: IStore[]) {
+export function searchResultsHTML(stores: IStoreDocument[]) {
     const html = stores
         .map(store => {
             return `

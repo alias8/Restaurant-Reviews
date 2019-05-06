@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { IStore } from "../models/Store";
+import { IStoreDocument } from "../models/Store";
 import { $ } from "./bling";
 
 const mapOptions = {
@@ -13,7 +13,7 @@ const mapOptions = {
 function loadPlaces(map: google.maps.Map, lat = 43.2, lng = -79.8) {
     axios
         .get(`/api/stores/near?lat=${lat}&lng=${lng}`)
-        .then((result: AxiosResponse<IStore[]>) => {
+        .then((result: AxiosResponse<IStoreDocument[]>) => {
             const places = result.data;
             if (!places.length) {
                 alert("no places found!");
@@ -24,7 +24,7 @@ function loadPlaces(map: google.maps.Map, lat = 43.2, lng = -79.8) {
             const infoWindow = new google.maps.InfoWindow();
 
             const markers: google.maps.Marker[] = places.map(
-                (place: IStore) => {
+                (place: IStoreDocument) => {
                     const [placeLng, placeLat] = place.location.coordinates;
                     const position = { lat: placeLat, lng: placeLng };
                     bounds.extend(position);

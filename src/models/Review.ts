@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 export interface IReview extends mongoose.Document {
     author: mongoose.Types.Buffer;
@@ -37,6 +37,7 @@ const reviewSchema = new mongoose.Schema({
     }
 });
 
+// Give us the meta data for authors, not just their ID
 function autopopulate(next: any) {
     this.populate("author");
     next();

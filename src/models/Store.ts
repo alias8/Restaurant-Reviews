@@ -1,9 +1,10 @@
 import dompurify from "dompurify";
-import mongoose from "mongoose";
+import mongoose, { model } from "mongoose";
 import slug from "slugs";
 import { DOMPurify } from "../helpers";
+import { IUserModel } from "./User";
 
-export interface IStore extends mongoose.Document {
+export interface IStoreDocument extends mongoose.Document {
     name: string;
     slug: string;
     description: string;
@@ -15,10 +16,14 @@ export interface IStore extends mongoose.Document {
     };
     photo: string;
     author: mongoose.Types.Buffer;
-    getTagsList: () => any;
 }
 
-const storeSchema = new mongoose.Schema<IStore>(
+export interface IStoreModel extends mongoose.Model<IStoreDocument> {
+    getTagsList: () => any;
+    getTopStores: () => any;
+}
+
+const storeSchema = new mongoose.Schema<IStoreDocument>(
     {
         author: {
             ref: "User",
@@ -74,19 +79,14 @@ storeSchema.index({
     location: "2dsphere"
 });
 
-/*
- * We want a field on the Store schema that is an array of all reviews for
- * this store. The Review schema already has a field for the store, and
- * if we set a manual field in Store schema to remember all the reviews
- * we will be managing data in two places. Using a virtual field will
- * query for us the relevant fields.
- * */
-// find reviews where the stores _id property === reviews store property
-storeSchema.virtual("reviews", {
-    foreignField: "store", // the field on the Review to match with the localField
-    localField: "_id", // the field on our Store that needs to match with our foreignField
-    ref: "Review" // the model to link
-});
+// Give us the meta data for authors, not just their ID
+function autopopulate(next: any) {
+    this.populate("author");
+    next();
+}
+
+storeSchema.pre("find", autopopulate);
+storeSchema.pre("findOne", autopopulate);
 
 // tslint:disable-next-line:only-arrow-functions console.log("hello")
 storeSchema.pre("validate", async function(next) {
@@ -97,7 +97,7 @@ storeSchema.pre("validate", async function(next) {
 
 // tslint:disable-next-line:only-arrow-functions
 storeSchema.pre("save", async function(next) {
-    const that = this as IStore;
+    const that = this as IStoreDocument;
     if (!this.isModified("name")) {
         next();
         return;
@@ -128,7 +128,47 @@ storeSchema.statics.getTagsList = function() {
     ]);
 };
 
-export const Store: mongoose.Model<IStore> = mongoose.model<IStore>(
+/*
+ * We want a field on the Store schema that is an array of all reviews for
+ * this store. The Review schema already has a field for the store, and
+ * if we set a manual field in Store schema to remember all the reviews
+ * we will be managing data in two places. Using a virtual field will
+ * query the relevant fields for us.
+ * */
+// find reviews where the stores _id property === reviews store property
+storeSchema.virtual("reviews", {
+    foreignField: "store", // the field on the Review to match with the localField
+    localField: "_id", // the field on our Store that needs to match with our foreignField
+    ref: "Review" // the model to link
+});
+
+storeSchema.statics.getTopStores = function() {
+    return this.aggregate([
+        // Lookup stores and populate their reviews
+        {
+            $lookup: {
+                as: "reviews", // what key the reviews will be under in the JSON
+                foreignField: "store",
+                from: "reviews", // what model name to link? MongoDB actually lowercases the model name and adds an s on the end
+                localField: "_id"
+            }
+        },
+        // filter for only items that have 2 or more reviews
+        { $match: { "reviews.1": { $exists: true } } },
+        // Add the average reviews field
+        {
+            $addFields: {
+                averageRating: { $avg: "$reviews.rating" }
+            }
+        },
+        // sort it by our new field, highest reviews first
+        { $sort: { averageRating: -1 } },
+        // limit to at most 10
+        { $limit: 10 }
+    ]);
+};
+
+export const Store: IStoreModel = mongoose.model<IStoreDocument, IStoreModel>(
     "Store",
     storeSchema
 );

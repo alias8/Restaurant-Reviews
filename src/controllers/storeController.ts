@@ -1,12 +1,13 @@
 import express from "express";
 import jimp from "jimp";
+import mongoose, { Promise } from "mongoose";
 import multer, { Options } from "multer";
 import path from "path";
 import uuid from "uuid";
 import { IController } from "../app";
 import { catchErrors } from "../handlers/errorHandlers";
 import { DOMPurify } from "../helpers";
-import { IStore, Store } from "../models/Store";
+import { IStoreDocument, Store } from "../models/Store";
 import { IUserModel, User } from "../models/User";
 import { publicDirectory } from "../paths";
 import { AuthenticationController } from "./authController";
@@ -69,6 +70,8 @@ export class StoreController implements IController {
         this.router.get("/map", catchErrors(this.mapPage));
         this.router.get("/", catchErrors(this.getStores));
         this.router.get("/stores", catchErrors(this.getStores));
+        this.router.get("/top", catchErrors(this.getTopStores));
+        this.router.get("/stores/page/:page", catchErrors(this.getStores));
     }
 
     private homePage = (
@@ -116,12 +119,40 @@ export class StoreController implements IController {
         request: express.Request,
         response: express.Response
     ) => {
+        const page = request.params.page || 1;
+        const limit = 4;
+        const skip = page * limit - limit;
         // 1. query the database for a list of all stores
-        const stores = await Store.find();
-        response.render("stores", { title: "Stores", stores });
+        const storesPromise = Store.find()
+            .skip(skip)
+            .limit(limit)
+            .sort({ created: "desc" });
+
+        const countPromise = Store.count({});
+
+        const [stores, count] = await Promise.all([
+            storesPromise,
+            countPromise
+        ]);
+        const pages = Math.ceil(count / limit);
+        if (!stores.length && skip) {
+            request.flash(
+                "info",
+                `Page ${page} does not exist, you have been redirected to page ${pages}`
+            );
+            response.redirect(`/stores/page/${pages}`);
+            return;
+        }
+        response.render("stores", {
+            count,
+            page,
+            pages,
+            stores,
+            title: "Stores"
+        });
     };
 
-    private confirmOwner = (store: IStore, user: IUserModel) => {
+    private confirmOwner = (store: IStoreDocument, user: IUserModel) => {
         if (!store.author.equals(user._id)) {
             throw Error("You must own a store in order to edit it!");
         }
@@ -132,7 +163,7 @@ export class StoreController implements IController {
         response: express.Response
     ) => {
         // 1. find store given id
-        const store: IStore | null = await Store.findOne({
+        const store: IStoreDocument | null = await Store.findOne({
             _id: request.params.id
         });
         if (store) {
@@ -190,7 +221,7 @@ export class StoreController implements IController {
     ) => {
         const tag = request.params.tag;
         const tagQuery = tag || { $exists: true };
-        const tagsPromise = (Store as any).getTagsList();
+        const tagsPromise = Store.getTagsList();
         const storesPromise = Store.find({ tags: tagQuery });
         const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
         response.render("tag", { tag, tags, stores, title: "Tags" });
@@ -283,5 +314,14 @@ export class StoreController implements IController {
         response: express.Response
     ) => {
         response.render("map", { title: "Map" });
+    };
+
+    private getTopStores = async (
+        request: express.Request,
+        response: express.Response
+    ) => {
+        // 1. query the database for a list of all stores
+        const stores = await Store.getTopStores();
+        response.render("topStores", { stores, title: "Top Stores!" });
     };
 }
