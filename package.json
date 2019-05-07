@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently --kill-others \"npm run build\" \"npm run start\"",
-    "start": "nodemon ./src/public/dist/app.bundle.js",
+    "dev1": "concurrently --kill-others \"npm run build\" \"npm run start\"",
+    "now-build": "npm run build",
+    "start1": "nodemon ./src/public/dist/app.bundle.js",
+    "start": "node ./src/public/dist/app.bundle.js",
     "build": "node ./scripts.js",
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",

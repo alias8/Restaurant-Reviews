@@ -25,4 +25,4 @@ That will populate 16 stores with 3 authors and 41 reviews. The logins for the a
 |Beau|beau@example.com|beau|
 
 
-todo: why isn't webpack recompiling when pug files change?
+todo: use postmark as email client
