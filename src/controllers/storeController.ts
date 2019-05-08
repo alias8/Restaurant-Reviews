@@ -9,7 +9,7 @@ import { catchErrors } from "../handlers/errorHandlers";
 import { DOMPurify } from "../helpers";
 import { IStoreDocument, Store } from "../models/Store";
 import { IUserModel, User } from "../models/User";
-import { publicDirectory } from "../paths";
+import { staticDirectory } from "../paths";
 import { AuthenticationController } from "./authController";
 
 export class StoreController implements IController {
@@ -95,7 +95,7 @@ export class StoreController implements IController {
         const photo = await jimp.read(request.file.buffer);
         await photo.resize(800, jimp.AUTO);
         await photo.write(
-            path.join(publicDirectory, "uploads", request.body.photo)
+            path.join(staticDirectory, "uploads", request.body.photo)
         );
         // once we have written photo to file system
         next();

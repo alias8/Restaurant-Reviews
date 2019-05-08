@@ -1,6 +1,7 @@
 /* tslint:disable:object-literal-sort-keys */
 import autoprefixer from "autoprefixer";
 import CleanWebpackPlugin from "clean-webpack-plugin";
+import CopyPlugin from "copy-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
 import webpack = require("webpack");
@@ -18,7 +19,7 @@ const baseConfig = (): webpack.Configuration => {
         watch: true,
         devtool: "source-map",
         output: {
-            path: path.resolve(__dirname, "src", "public", "dist"),
+            path: path.resolve(__dirname, "dist"),
             filename: "[name].bundle.js"
         },
         resolve: {
@@ -65,7 +66,13 @@ const baseConfig = (): webpack.Configuration => {
         },
         plugins: [
             new CleanWebpackPlugin(),
-            new MiniCssExtractPlugin({ filename: "style.css" })
+            new MiniCssExtractPlugin({ filename: "style.css" }),
+            new CopyPlugin([
+                {
+                    from: path.resolve("src", "static"),
+                    to: path.resolve("dist", "static")
+                }
+            ])
         ]
     };
 };

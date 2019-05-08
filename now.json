@@ -1,13 +1,9 @@
 {
   "version": 2,
-    "builds": [
-      {
-        "src": "package.json",
-        "use": "@now/static-build",
-        "config": {
-          "maxLambdaSize": "50mb",
-          "distDir": "./src/public/dist/app.bundle.js"
-        }
-      }
-    ]
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/static-build"
+    }
+  ]
 }
