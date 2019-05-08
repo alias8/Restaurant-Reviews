@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node ./scripts.js",
-    "dev": "node ./dist/app.bundle.js",
+    "dev": "node ./public/js/app.bundle.js",
     "now-build": "npm run build",
     "now-dev": "nodemon ./src/public/dist/app.bundle.js",
     "lint": "tslint --project tsconfig.json --config tslint.json",

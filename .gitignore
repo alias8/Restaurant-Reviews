@@ -3,3 +3,4 @@ node_modules/
 dist
 variables.env
 variables.env.now
+public

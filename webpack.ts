@@ -19,7 +19,7 @@ const baseConfig = (): webpack.Configuration => {
         watch: true,
         devtool: "source-map",
         output: {
-            path: path.resolve(__dirname, "dist"),
+            path: path.resolve(__dirname, "public", "js"),
             filename: "[name].bundle.js"
         },
         resolve: {
@@ -66,11 +66,11 @@ const baseConfig = (): webpack.Configuration => {
         },
         plugins: [
             new CleanWebpackPlugin(),
-            new MiniCssExtractPlugin({ filename: "style.css" }),
+            new MiniCssExtractPlugin({ filename: "../styles/style.css" }),
             new CopyPlugin([
                 {
                     from: path.resolve("src", "static"),
-                    to: path.resolve("dist", "static")
+                    to: path.resolve("public", "static")
                 }
             ])
         ]
