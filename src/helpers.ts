@@ -1,6 +1,6 @@
 import fs from "fs";
 import momentImport from "moment";
-import { staticDirectory } from "./paths";
+import { publicDirectory } from "./paths";
 
 import createDOMPurify from "dompurify";
 
@@ -19,7 +19,7 @@ export const staticMap = ([lng, lat]: string[]) =>
 
 // inserting an SVG
 export const icon = (name: string) => {
-    return fs.readFileSync(`${staticDirectory}/images/icons/${name}.svg`);
+    return fs.readFileSync(`${publicDirectory}/images/icons/${name}.svg`);
 };
 
 // Some details about the site

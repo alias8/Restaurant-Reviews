@@ -14,7 +14,7 @@ import "./styles/style.scss";
 
 import * as errorHandlers from "./handlers/errorHandlers";
 import { User } from "./models/User";
-import { staticDirectory, viewDirectory } from "./paths";
+import { publicDirectory, viewDirectory } from "./paths";
 
 export interface IController {
     // path: string;
@@ -28,7 +28,7 @@ class App {
         this.app = express();
 
         this.app.set("port", 7777);
-        this.app.use(express.static(staticDirectory));
+        this.app.use(express.static(publicDirectory));
         this.app.set("views", viewDirectory);
         this.app.set("view engine", "pug");
 
