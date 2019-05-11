@@ -5,7 +5,7 @@ import path from "path";
 import pug from "pug";
 import { IUserModel } from "../models/User";
 import { viewDirectory } from "../paths";
-import { publicDirectory } from "../paths";
+import { staticDirectory } from "../paths";
 
 // does not appear to be working, not sure why?
 const transport = nodemailer.createTransport({
