@@ -1,6 +1,5 @@
 node_modules/
 .idea
-dist
+build
 variables.env
 variables.env.now
-public

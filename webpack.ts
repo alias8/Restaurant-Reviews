@@ -19,7 +19,7 @@ const baseConfig = (): webpack.Configuration => {
         watch: true,
         devtool: "source-map",
         output: {
-            path: path.resolve(__dirname, "public", "js"),
+            path: path.resolve(__dirname, "build", "public", "dist"),
             filename: "[name].bundle.js"
         },
         resolve: {
@@ -65,12 +65,15 @@ const baseConfig = (): webpack.Configuration => {
             ]
         },
         plugins: [
-            new CleanWebpackPlugin(),
-            new MiniCssExtractPlugin({ filename: "../styles/style.css" }),
+            new MiniCssExtractPlugin({ filename: "style.css" }),
             new CopyPlugin([
                 {
-                    from: path.resolve("src", "static"),
-                    to: path.resolve("public", "static")
+                    from: path.resolve("src", "assets"),
+                    to: path.resolve(__dirname, "build", "public")
+                },
+                {
+                    from: path.resolve("src", "views"),
+                    to: path.resolve(__dirname, "build", "views")
                 }
             ])
         ]
@@ -119,6 +122,7 @@ const handleErrors = (err: Error, stats: Stats) => {
     }
 };
 
+new CleanWebpackPlugin().removeFiles(["dist"]);
 webpack(
     [generateWebpackConfigNode(), generateWebpackConfigBrowser()],
     async (err: Error, stats: Stats) => {

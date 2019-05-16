@@ -26,3 +26,8 @@ That will populate 16 stores with 3 authors and 41 reviews. The logins for the a
 
 
 todo: use postmark as email client
+
+todo: why is link not working for when at http://localhost:7777/store/mulberry-coffee
+style sheet link in layout.pug is:
+ link(rel='stylesheet', href='dist/style.css')
+ what does href really mean? where is express trying to look for files?

@@ -1,9 +1,9 @@
 import * as path from "path";
 
 /*
- * Since the source code is bundled in src/public/dist, we have to refer to
- * directories in relation to the bundled code, not the typescript files.
+ * Since the source code is bundled in dist, we have to refer to
+ * directories in relation to the bundled js code, not the typescript files.
  * */
-export const staticDirectory = path.join(__dirname, "..", "static");
-export const rootDirectory = path.join(__dirname, "..", "..");
-export const viewDirectory = path.join(staticDirectory, "views");
+export const staticDirectory = path.join(__dirname, "..");
+export const rootDirectory = path.join(staticDirectory, "..", "..");
+export const viewDirectory = path.join(staticDirectory, "..", "views");
