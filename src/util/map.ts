@@ -32,7 +32,7 @@ function loadPlaces(map: google.maps.Map, lat = 43.2, lng = -79.8) {
                         map,
                         position
                     });
-                    marker.setPlace({
+                    (marker as any).setPlace({
                         location: {
                             lat: placeLat,
                             lng: placeLng

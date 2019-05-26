@@ -16,7 +16,6 @@ const baseConfig = (): webpack.Configuration => {
             __dirname: false,
             __filename: false
         },
-        watch: true,
         devtool: "source-map",
         output: {
             path: path.resolve(__dirname, "build", "public", "dist"),

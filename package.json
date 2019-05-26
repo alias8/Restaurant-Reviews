@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node ./scripts.js",
-    "dev": "nodemon ./build/public/dist/app.bundle.js",
-    "now-build": "npm run build",
-    "now-dev": "npm run dev",
+    "start": "nodemon ./build/public/dist/app.bundle.js",
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",
     "prettier-lint-all": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && npm run lint:fix",
