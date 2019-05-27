@@ -7,7 +7,7 @@ import { StoreController } from "./controllers/storeController";
 import { UserController } from "./controllers/userController";
 import { rootDirectory } from "./paths";
 
-dotenv.config({ path: path.join(rootDirectory, "variables.env") });
+dotenv.config({ path: path.join(rootDirectory, ".env") });
 
 const app = new App([
     new UserController(),

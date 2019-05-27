@@ -1,14 +1,15 @@
 {
-  "name": "LearnNode-TS",
+  "name": "learn_node_ts",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node ./scripts.js",
-    "start": "nodemon ./build/public/dist/app.bundle.js",
+    "dev": "npm start dev --",
+    "package": "npm start package",
+    "start": "node ./scripts.js",
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",
-    "prettier-lint-all": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && npm run lint:fix",
+    "prettier-lint-all": "prettier --write \"*.{js,jsx,ts,tsx}\" && npm run lint:fix",
     "sample": "node ./src/public/dist/data.bundle.js",
     "blowitallaway": "node ./src/public/dist/data.bundle.js --delete"
   },
@@ -72,6 +73,7 @@
     "@types/uuid": "^3.4.4",
     "@types/validator": "^10.11.0",
     "@types/webpack-dev-server": "^3.1.5",
+    "@types/yargs": "^13.0.0",
     "autoprefixer": "^9.5.1",
     "clean-webpack-plugin": "^2.0.1",
     "concurrently": "^4.1.0",
@@ -93,8 +95,9 @@
     "typescript": "^3.4.3",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.3.1",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-dev-server": "^3.4.1",
+    "webpack-node-externals": "^1.7.2",
+    "yargs": "^13.2.4"
   },
   "dependencies": {
     "@types/autoprefixer": "^9.4.0",

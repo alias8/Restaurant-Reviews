@@ -6,11 +6,111 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
 import webpack = require("webpack");
 import { Stats } from "webpack";
+import WebpackDevServer from "webpack-dev-server";
 import nodeExternals from "webpack-node-externals";
+import yargs from "yargs";
 
-const baseConfig = (): webpack.Configuration => {
+const { argv } = yargs
+    .options({})
+    .command({
+        command: "dev",
+        describe: "Runs the server in dev mode",
+        builder: args =>
+            args.options({
+                environment: getEnvironmentOption(args)
+            }),
+        handler: async ({ environment }: { environment: Environment }) => {
+            await clean();
+            await Promise.all([webpackDev()]);
+            await serve(environment);
+        }
+    })
+    .command({
+        command: "package",
+        describe: "Builds the project in prod mode and zips up the dist folder",
+        handler: async () => {
+            await clean();
+            await webpackProd();
+        }
+    });
+
+enum Environment {
+    PROD = "prod",
+    STAGE = "stage",
+    LOCAL = "local",
+    SANDBOX = "sandbox"
+}
+
+const getEnvironmentOption = (args: yargs.Argv): yargs.Options => ({
+    alias: "e",
+    describe: "Sets the environment",
+    type: "string",
+    default: "local",
+    choices: ["local", "stage", "sandbox", "prod"] as Environment[]
+});
+
+function clean() {
+    new CleanWebpackPlugin().removeFiles(["dist"]);
+}
+
+function webpackDev() {
+    return new Promise(resolve => {
+        const server = new WebpackDevServer(
+            webpack([
+                generateWebpackConfigNode("development"),
+                generateWebpackConfigBrowser("development")
+            ]),
+            {
+                contentBase: "/",
+                hot: true,
+                historyApiFallback: true,
+                proxy: {
+                    "**": `http://localhost:${parseInt(
+                        `${process.env.PORT || 8000}`,
+                        10
+                    ) + 1}/`
+                },
+                disableHostCheck: true,
+                staticOptions: {},
+                quiet: false,
+                noInfo: false,
+                lazy: false,
+                watchOptions: {
+                    aggregateTimeout: 300,
+                    poll: true
+                },
+                https: false,
+                publicPath: "/static/",
+                stats: {
+                    colors: true,
+                    chunkModules: false
+                } as any
+            }
+        );
+    });
+}
+
+function webpackProd() {
+    return new Promise(resolve => {
+        webpack(
+            [
+                generateWebpackConfigNode("production"),
+                generateWebpackConfigBrowser("production")
+            ],
+            async (err: Error, stats: Stats) => {
+                handleErrors(err, stats);
+                console.log(stats.toString());
+                resolve();
+            }
+        );
+    });
+}
+
+const baseConfig = (
+    env: "development" | "production"
+): webpack.Configuration => {
     return {
-        mode: "development",
+        mode: env,
         context: path.resolve(__dirname, "src"),
         node: {
             __dirname: false,
@@ -79,21 +179,31 @@ const baseConfig = (): webpack.Configuration => {
     };
 };
 
-const generateWebpackConfigNode = (): webpack.Configuration => {
+const generateWebpackConfigNode = (
+    env: "development" | "production"
+): webpack.Configuration => {
     return {
-        ...baseConfig(),
+        ...baseConfig(env),
         entry: {
             app: "./server",
             data: "./data/load-sample-data"
         },
         target: "node",
-        externals: [nodeExternals()]
+        externals: [nodeExternals()],
+        ...(env === "development" && {
+            devServer: {
+                contentBase: path.join(__dirname, "dist"),
+                port: 7777
+            }
+        })
     };
 };
 
-const generateWebpackConfigBrowser = (): webpack.Configuration => {
+const generateWebpackConfigBrowser = (
+    env: "development" | "production"
+): webpack.Configuration => {
     return {
-        ...baseConfig(),
+        ...baseConfig(env),
         entry: {
             tools: "./util/tools"
         },
@@ -120,12 +230,3 @@ const handleErrors = (err: Error, stats: Stats) => {
         console.warn(info.warnings);
     }
 };
-
-new CleanWebpackPlugin().removeFiles(["dist"]);
-webpack(
-    [generateWebpackConfigNode(), generateWebpackConfigBrowser()],
-    async (err: Error, stats: Stats) => {
-        handleErrors(err, stats);
-        console.log(stats.toString());
-    }
-);
