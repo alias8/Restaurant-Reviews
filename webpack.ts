@@ -9,6 +9,7 @@ import { Stats } from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import nodeExternals from "webpack-node-externals";
 import yargs from "yargs";
+import { staticDirectory, viewDirectory } from "./src/paths";
 
 const getEnvironmentOption = (args: yargs.Argv): yargs.Options => ({
     alias: "e",
@@ -26,7 +27,7 @@ enum Environment {
 }
 
 function clean() {
-    new CleanWebpackPlugin().removeFiles(["dist"]);
+    // new CleanWebpackPlugin().removeFiles(["dist"]);
 }
 
 function webpackDev() {
@@ -112,7 +113,7 @@ const baseConfig = (
         }),
         devtool: "source-map",
         output: {
-            path: path.resolve(__dirname, "build", "public", "dist"),
+            path: path.resolve(staticDirectory, "dist"),
             filename: "[name].bundle.js"
         },
         resolve: {
@@ -157,19 +158,7 @@ const baseConfig = (
                 }
             ]
         },
-        plugins: [
-            new MiniCssExtractPlugin({ filename: "style.css" }),
-            new CopyPlugin([
-                {
-                    from: path.resolve("src", "assets"),
-                    to: path.resolve(__dirname, "build", "public")
-                },
-                {
-                    from: path.resolve("src", "views"),
-                    to: path.resolve(__dirname, "build", "views")
-                }
-            ])
-        ]
+        plugins: [new MiniCssExtractPlugin({ filename: "style.css" })]
     };
 };
 
