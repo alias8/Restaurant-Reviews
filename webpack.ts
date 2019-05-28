@@ -10,37 +10,6 @@ import WebpackDevServer from "webpack-dev-server";
 import nodeExternals from "webpack-node-externals";
 import yargs from "yargs";
 
-const { argv } = yargs
-    .options({})
-    .command({
-        command: "dev",
-        describe: "Runs the server in dev mode",
-        builder: args =>
-            args.options({
-                environment: getEnvironmentOption(args)
-            }),
-        handler: async ({ environment }: { environment: Environment }) => {
-            await clean();
-            await Promise.all([webpackDev()]);
-            await serve(environment);
-        }
-    })
-    .command({
-        command: "package",
-        describe: "Builds the project in prod mode and zips up the dist folder",
-        handler: async () => {
-            await clean();
-            await webpackProd();
-        }
-    });
-
-enum Environment {
-    PROD = "prod",
-    STAGE = "stage",
-    LOCAL = "local",
-    SANDBOX = "sandbox"
-}
-
 const getEnvironmentOption = (args: yargs.Argv): yargs.Options => ({
     alias: "e",
     describe: "Sets the environment",
@@ -48,6 +17,13 @@ const getEnvironmentOption = (args: yargs.Argv): yargs.Options => ({
     default: "local",
     choices: ["local", "stage", "sandbox", "prod"] as Environment[]
 });
+
+enum Environment {
+    PROD = "prod",
+    STAGE = "stage",
+    LOCAL = "local",
+    SANDBOX = "sandbox"
+}
 
 function clean() {
     new CleanWebpackPlugin().removeFiles(["dist"]);
@@ -60,6 +36,7 @@ function webpackDev() {
                 generateWebpackConfigNode("development"),
                 generateWebpackConfigBrowser("development")
             ]),
+            // todo: what does all this config mean? do I have to point to /app.bundle.js etc?
             {
                 contentBase: "/",
                 hot: true,
@@ -85,6 +62,20 @@ function webpackDev() {
                     colors: true,
                     chunkModules: false
                 } as any
+            }
+        );
+
+        server.listen(
+            parseInt(`${process.env.PORT || 8000}`, 10),
+            "0.0.0.0",
+            error => {
+                if (error) {
+                    throw error;
+                }
+                console.log(
+                    "[webpack-dev-server]",
+                    "Webpack Dev Server is now up"
+                );
             }
         );
     });
@@ -116,6 +107,9 @@ const baseConfig = (
             __dirname: false,
             __filename: false
         },
+        ...(env === "development" && {
+            watch: true
+        }),
         devtool: "source-map",
         output: {
             path: path.resolve(__dirname, "build", "public", "dist"),
@@ -189,13 +183,7 @@ const generateWebpackConfigNode = (
             data: "./data/load-sample-data"
         },
         target: "node",
-        externals: [nodeExternals()],
-        ...(env === "development" && {
-            devServer: {
-                contentBase: path.join(__dirname, "dist"),
-                port: 7777
-            }
-        })
+        externals: [nodeExternals()]
     };
 };
 
@@ -230,3 +218,26 @@ const handleErrors = (err: Error, stats: Stats) => {
         console.warn(info.warnings);
     }
 };
+
+const { argv } = yargs
+    .options({})
+    .command({
+        command: "dev",
+        describe: "Runs the server in dev mode",
+        builder: args =>
+            args.options({
+                environment: getEnvironmentOption(args)
+            }),
+        handler: async () => {
+            await clean();
+            await Promise.all([webpackDev()]);
+        }
+    })
+    .command({
+        command: "package",
+        describe: "Builds the project in prod mode and zips up the dist folder",
+        handler: async () => {
+            await clean();
+            await webpackProd();
+        }
+    });
