@@ -1,1 +1,1 @@
-web: node scripts.js
+web: npm run package
