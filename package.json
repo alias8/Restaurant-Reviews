@@ -10,6 +10,7 @@
     "package": "npm start package",
     "start": "node ./scripts.js",
     "start-server": "node ./src/public/dist/app.bundle.js",
+    "heroku-postbuild": "npm run package",
     "docker": "docker.sh",
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",
