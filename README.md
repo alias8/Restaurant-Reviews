@@ -28,3 +28,4 @@ That will populate 16 stores with 3 authors and 41 reviews. The logins for the a
 todo: use postmark as email client
 
 todo: how to deploy with docker, perhaps rewrite in format that now version 2 wants?
+deploy with heroku
