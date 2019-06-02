@@ -217,6 +217,5 @@ const { argv } = yargs
         handler: async () => {
             await clean();
             await webpackProd();
-            await serve();
         }
     });
