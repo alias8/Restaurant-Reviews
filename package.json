@@ -1,8 +1,10 @@
 {
   "name": "learn_node_ts",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A sample express app using typescript and mongoDB",
+  "engines": {
+    "node": "10.x"
+  },
   "scripts": {
     "dev": "npm start dev --",
     "package": "npm start package",
@@ -13,9 +15,6 @@
     "prettier-lint-all": "prettier --write \"*.{js,jsx,ts,tsx}\" && npm run lint:fix",
     "sample": "node ./src/public/dist/data.bundle.js",
     "blowitallaway": "node ./src/public/dist/data.bundle.js --delete"
-  },
-  "now": {
-    "dotenv": "variables.env.now"
   },
   "repository": {
     "type": "git",
