@@ -1,4 +1,4 @@
 require("ts-node").register({
-    /* options */
+    files: true
 });
 require("./webpack");

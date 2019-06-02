@@ -1,15 +1,14 @@
 /* tslint:disable:object-literal-sort-keys */
 import autoprefixer from "autoprefixer";
-import CleanWebpackPlugin from "clean-webpack-plugin";
-import CopyPlugin from "copy-webpack-plugin";
+import del from "del";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import nodemon from "nodemon";
 import path from "path";
 import webpack = require("webpack");
 import { Stats } from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import nodeExternals from "webpack-node-externals";
 import yargs from "yargs";
-import { staticDirectory, viewDirectory } from "./src/paths";
 
 const getEnvironmentOption = (args: yargs.Argv): yargs.Options => ({
     alias: "e",
@@ -27,56 +26,45 @@ enum Environment {
 }
 
 function clean() {
-    // new CleanWebpackPlugin().removeFiles(["dist"]);
+    return del(path.join(__dirname, "src", "public", "dist"));
+}
+
+/**
+ * Runs the Server
+ */
+function serve() {
+    return new Promise(resolve => {
+        const monitor = nodemon({
+            script: path.join(
+                __dirname,
+                "src",
+                "public",
+                "dist",
+                "app.bundle.js"
+            )
+        }).once("start", () => {
+            resolve();
+        });
+
+        process.once("SIGINT", () => {
+            monitor.once("exit", () => {
+                process.exit();
+            });
+        });
+    });
 }
 
 function webpackDev() {
     return new Promise(resolve => {
-        const server = new WebpackDevServer(
-            webpack([
+        webpack(
+            [
                 generateWebpackConfigNode("development"),
                 generateWebpackConfigBrowser("development")
-            ]),
-            // todo: what does all this config mean? do I have to point to /app.bundle.js etc?
-            {
-                contentBase: "/",
-                hot: true,
-                historyApiFallback: true,
-                proxy: {
-                    "**": `http://localhost:${parseInt(
-                        `${process.env.PORT || 8000}`,
-                        10
-                    ) + 1}/`
-                },
-                disableHostCheck: true,
-                staticOptions: {},
-                quiet: false,
-                noInfo: false,
-                lazy: false,
-                watchOptions: {
-                    aggregateTimeout: 300,
-                    poll: true
-                },
-                https: false,
-                publicPath: "/static/",
-                stats: {
-                    colors: true,
-                    chunkModules: false
-                } as any
-            }
-        );
-
-        server.listen(
-            parseInt(`${process.env.PORT || 8000}`, 10),
-            "0.0.0.0",
-            error => {
-                if (error) {
-                    throw error;
-                }
-                console.log(
-                    "[webpack-dev-server]",
-                    "Webpack Dev Server is now up"
-                );
+            ],
+            async (err: Error, stats: Stats) => {
+                handleErrors(err, stats);
+                console.log(stats.toString());
+                resolve();
             }
         );
     });
@@ -113,7 +101,7 @@ const baseConfig = (
         }),
         devtool: "source-map",
         output: {
-            path: path.resolve(staticDirectory, "dist"),
+            path: path.resolve(__dirname, "src", "public", "dist"),
             filename: "[name].bundle.js"
         },
         resolve: {
@@ -219,7 +207,8 @@ const { argv } = yargs
             }),
         handler: async () => {
             await clean();
-            await Promise.all([webpackDev()]);
+            await webpackDev();
+            await serve();
         }
     })
     .command({
@@ -228,5 +217,6 @@ const { argv } = yargs
         handler: async () => {
             await clean();
             await webpackProd();
+            await serve();
         }
     });

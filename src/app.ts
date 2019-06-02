@@ -27,7 +27,7 @@ class App {
     constructor(controllers: IController[]) {
         this.app = express();
 
-        this.app.set("port", 7777);
+        this.app.set("port", process.env.PORT);
         this.app.use(express.static(staticDirectory));
         this.app.set("views", viewDirectory);
         this.app.set("view engine", "pug");

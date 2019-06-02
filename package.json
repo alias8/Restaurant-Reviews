@@ -7,6 +7,7 @@
     "dev": "npm start dev --",
     "package": "npm start package",
     "start": "node ./scripts.js",
+    "docker": "docker.sh",
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",
     "prettier-lint-all": "prettier --write \"*.{js,jsx,ts,tsx}\" && npm run lint:fix",
