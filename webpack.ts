@@ -3,10 +3,11 @@ import autoprefixer from "autoprefixer";
 import del from "del";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import nodemon from "nodemon";
+import OptimizeCSSAssetsPlugin from "optimize-css-assets-webpack-plugin";
 import path from "path";
+import TerserJSPlugin from "terser-webpack-plugin";
 import webpack = require("webpack");
 import { Stats } from "webpack";
-import WebpackDevServer from "webpack-dev-server";
 import nodeExternals from "webpack-node-externals";
 import yargs from "yargs";
 
@@ -99,7 +100,10 @@ const baseConfig = (
         ...(env === "development" && {
             watch: true
         }),
-        devtool: "source-map",
+        optimization: {
+            minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+        },
+        devtool: env === "development" ? "inline-source-map" : "source-map",
         output: {
             path: path.resolve(__dirname, "src", "public", "dist"),
             filename: "[name].bundle.js"
@@ -213,7 +217,7 @@ const { argv } = yargs
     })
     .command({
         command: "package",
-        describe: "Builds the project in prod mode and zips up the dist folder",
+        describe: "Builds the project in prod mode",
         handler: async () => {
             await clean();
             await webpackProd();

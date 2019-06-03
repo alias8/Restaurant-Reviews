@@ -85,10 +85,12 @@ export function makeMap(mapDiv: HTMLInputElement | null) {
         const autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.addListener("place_changed", () => {
             const place = autocomplete.getPlace();
-            map.setCenter({
-                lat: place.geometry!.location.lat(),
-                lng: place.geometry!.location.lng()
-            });
+            if (place && place.geometry && place.geometry.location) {
+                map.setCenter({
+                    lat: place.geometry!.location.lat(),
+                    lng: place.geometry!.location.lng()
+                });
+            }
         });
     }
 }
