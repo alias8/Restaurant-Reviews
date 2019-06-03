@@ -5,9 +5,7 @@ import path from "path";
 import pug from "pug";
 import { IUserModel } from "../models/User";
 import { viewDirectory } from "../paths";
-import { staticDirectory } from "../paths";
 
-// does not appear to be working, not sure why?
 const transport = nodemailer.createTransport({
     auth: {
         pass: process.env.MAIL_PASS,
@@ -15,7 +13,7 @@ const transport = nodemailer.createTransport({
     },
     debug: true,
     host: process.env.MAIL_HOST,
-    port: 2525
+    port: (process.env.MAIL_PORT as unknown) as number
 });
 
 const generateHTML = (filename: string, options = {}) => {
