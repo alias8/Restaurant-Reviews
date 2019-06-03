@@ -1,4 +1,10 @@
-Hosted on Heroku: https://alias8-express.herokuapp.com/
+Example expressJS app from [Wes Bos](https://wesbos.com/learn-node/). 
+Finished app is hosted on Heroku: https://alias8-express.herokuapp.com/
+
+Packages used:
+- Express JS
+- MongoDB
+- Typescript
 
 ## to start:
 
@@ -26,8 +32,3 @@ That will populate 16 stores with 3 authors and 41 reviews. The logins for the a
 |Debbie Downer|debbie@example.com|debbie|
 |Beau|beau@example.com|beau|
 
-
-todo: use postmark as email client
-
-todo: how to deploy with docker, perhaps rewrite in format that now version 2 wants?
-deploy with heroku
