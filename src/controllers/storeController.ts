@@ -105,6 +105,7 @@ export class StoreController implements IController {
         request: express.Request,
         response: express.Response
     ) => {
+        // @ts-ignore
         request.body.author = request.user._id;
         const store = new Store(request.body);
         await store.save();
@@ -121,6 +122,7 @@ export class StoreController implements IController {
     ) => {
         const page = request.params.page || 1;
         const limit = 4;
+        // @ts-ignore
         const skip = page * limit - limit;
         // 1. query the database for a list of all stores
         const storesPromise = Store.find()
@@ -168,6 +170,7 @@ export class StoreController implements IController {
         });
         if (store) {
             // 2. confirm they are owner of store
+            // @ts-ignore
             this.confirmOwner(store, request.user);
             // 3. render out the edit form so the user can update their store
             response.render("editStore", {
@@ -285,13 +288,16 @@ export class StoreController implements IController {
         response: express.Response
     ) => {
         // find store with that id
+        // @ts-ignore
         const hearts = request.user.hearts.map((obj: any) => {
             return obj.toString();
         });
         const operator = hearts.includes(request.params.id)
             ? "$pull"
             : "$addToSet";
+
         const user = await User.findByIdAndUpdate(
+            // @ts-ignore
             request.user._id,
             { [operator]: { hearts: request.params.id } },
             { new: true }
@@ -304,6 +310,7 @@ export class StoreController implements IController {
         response: express.Response
     ) => {
         const stores = await Store.find({
+            // @ts-ignore
             _id: { $in: request.user.hearts }
         });
         response.render("stores", { title: "Hearted Stores" });

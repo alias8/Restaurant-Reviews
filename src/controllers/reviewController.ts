@@ -23,6 +23,7 @@ export class ReviewController implements IController {
         request: express.Request,
         response: express.Response
     ) => {
+        // @ts-ignore
         request.body.author = request.user._id;
         request.body.store = request.params.id;
         const newReview = new Review(request.body);

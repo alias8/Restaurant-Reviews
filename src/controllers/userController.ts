@@ -111,6 +111,7 @@ export class UserController implements IController {
         };
 
         const user = await User.findOneAndUpdate(
+            // @ts-ignore
             { _id: request.user._id },
             { $set: updates },
             { new: true, runValidators: true, context: "query" }
