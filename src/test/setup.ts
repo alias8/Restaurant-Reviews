@@ -6,6 +6,7 @@ const path = require("path");
 dotenv.config({
     path: path.resolve(__dirname, "..", "config", "test", ".env")
 });
+
 // mongoose.connect(process.env.DATABASE || "", {
 //     useCreateIndex: true,
 //     useNewUrlParser: true

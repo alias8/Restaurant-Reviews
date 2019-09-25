@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app } from "../src/server";
+import { app } from "../server";
 
 test("Hello world", () => {
     const a = 2;
