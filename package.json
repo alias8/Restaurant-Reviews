@@ -15,8 +15,8 @@
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",
     "prettier-lint-all": "prettier --write \"*.{js,jsx,ts,tsx}\" && npm run lint:fix",
-    "sample": "node ./src/public/dist/data.bundle.js",
-    "blowitallaway": "node ./src/public/dist/data.bundle.js --delete"
+    "sample": "npm run package && node ./src/public/dist/data.bundle.js",
+    "blowitallaway": "npm run package && node ./src/public/dist/data.bundle.js --delete"
   },
   "repository": {
     "type": "git",
