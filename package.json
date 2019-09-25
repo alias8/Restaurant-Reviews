@@ -36,6 +36,10 @@
     "maintained node versions",
     "not dead"
   ],
+  "jest": {
+    "verbose": true,
+    "setupFiles": ["./test/setup.ts"]
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
