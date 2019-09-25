@@ -1,5 +1,4 @@
 node_modules/
 .idea
 dist
-dev.env
-test.env
+.env

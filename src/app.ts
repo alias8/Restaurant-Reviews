@@ -27,7 +27,6 @@ class App {
     constructor(controllers: IController[]) {
         this.app = express();
 
-        this.app.set("port", process.env.PORT);
         this.app.use(express.static(staticDirectory));
         this.app.set("views", viewDirectory);
         this.app.set("view engine", "pug");
@@ -40,7 +39,8 @@ class App {
         this.initializeErrorHandling();
     }
 
-    public listen() {
+    public listen(port: string) {
+        this.app.set("port", port);
         const server = this.app.listen(this.app.get("port"), () => {
             console.log(
                 `Express running → PORT ${

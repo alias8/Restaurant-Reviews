@@ -160,7 +160,7 @@ const generateWebpackConfigNode = (
     return {
         ...baseConfig(env),
         entry: {
-            app: "./server",
+            app: "./index",
             data: "./data/load-sample-data"
         },
         target: "node",
