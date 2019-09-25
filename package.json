@@ -38,9 +38,6 @@
   ],
   "jest": {
     "verbose": true,
-    "setupFiles": [
-      "./src/test/setup.ts"
-    ],
     "testEnvironment": "node",
     "roots": [
       "<rootDir>/src"

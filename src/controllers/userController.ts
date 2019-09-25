@@ -13,6 +13,12 @@ export class UserController implements IController {
     }
 
     private initializeRoutes() {
+        this.router.get(
+            "/james",
+            (request: express.Request, response: express.Response) => {
+                response.send(200);
+            }
+        );
         this.router.get("/login", this.loginForm);
         this.router.get("/register", this.registerForm);
         this.router.post(

@@ -32,3 +32,9 @@ That will populate 16 stores with 3 authors and 41 reviews. The logins for the a
 |Debbie Downer|debbie@example.com|debbie|
 |Beau|beau@example.com|beau|
 
+#todo:
+1. leave this repo as it was before jest config, reupload to github so that env
+variables are not visible, deploy to heroku.
+2. make another repo with the express returning json instead of rendering pug, 
+and test it with jest.
+
