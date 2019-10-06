@@ -7,7 +7,7 @@ import { Store } from "../models/Store";
 import { User } from "../models/User";
 import { rootDirectory } from "../paths";
 
-dotenv.config({ path: path.join(rootDirectory, ".env") });
+dotenv.config();
 mongoose.connect(process.env.DATABASE || "", {
     useCreateIndex: true,
     useNewUrlParser: true

@@ -10,7 +10,7 @@ if (yargs.argv.env === "test") {
 } else if (yargs.argv.env === "prod") {
     env = "prod";
 }
-dotenv.config({ path: path.resolve(__dirname, "..", "config", env, ".env") });
+dotenv.config();
 
 import App from "./app";
 import { AuthenticationController } from "./controllers/authController";
