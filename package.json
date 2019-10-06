@@ -56,6 +56,9 @@
     ]
   },
   "devDependencies": {
+
+  },
+  "dependencies": {
     "@types/autoprefixer": "^9.4.0",
     "@types/axios": "^0.14.0",
     "@types/connect-flash": "0.0.34",
@@ -118,9 +121,7 @@
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.4.1",
     "webpack-node-externals": "^1.7.2",
-    "yargs": "^13.2.4"
-  },
-  "dependencies": {
+    "yargs": "^13.2.4",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "build": "^0.1.4",
